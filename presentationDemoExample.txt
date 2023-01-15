@@ -1,0 +1,143 @@
+title: George of the Jungle
+
+rating: 8.3
+
+Poster URL: https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ06OFG3CgXX4WkyL9V5_sKex5IqFYuVsv3vJ0rKuzgZhI2dlQG
+
+release_date: 1997/07/16
+
+Description: George of the Jungle is a 1997 American comedy film directed by Sam Weisman and based on Jay Ward and Bill Scott’s 1967 American animated television series of the same name, which in turn is a spoof of the fictional character Tarzan, created by Edgar Rice Burroughs. The film was produced by Walt Disney Pictures and was released in theatres throughout the United States and Canada on July 16, 1997. 
+
+
+Genreid: 4 (Comedy)
+
+Website URL: https://en.wikipedia.org/wiki/George_of_the_Jungle_(film)
+
+Active: N
+======================================================================
+
+title: The Mummy
+
+rating: 9.1
+
+Poster URL: https://upload.wikimedia.org/wikipedia/en/thumb/6/68/The_mummy.jpg/220px-The_mummy.jpg
+
+release_date: 1999/05/07
+
+Description: The Mummy is a 1999 American action-adventure film written and directed by Stephen Sommers. It is a remake of the 1932 film of the same name, starring Brendan Fraser, Rachel Weisz, John Hannah and Arnold Vosloo in the title role as the reanimated mummy. The film follows adventurer Rick O'Connell as he travels to Hamunaptra, the City of the Dead, with a librarian and her older brother, where they accidentally awaken Imhotep, a cursed high priest with supernatural powers.
+
+
+Genreid: 1 (Action)
+
+Website URL: https://en.wikipedia.org/wiki/The_Mummy_(1999_film)
+
+Active: N
+
+========================================================================
+
+title: Bedazzled
+
+rating: 7.3
+
+Poster URL: https://upload.wikimedia.org/wikipedia/en/thumb/6/6a/Bedazzled.jpg/220px-Bedazzled.jpg
+
+release_date: 2001/01/18
+
+Description:Bedazzled is a 2000 fantasy romantic comedy film[3] directed by Harold Ramis and starring Brendan Fraser and Elizabeth Hurley. It is a remake of the 1967 British film of the same name, written by Peter Cook and Dudley Moore, which was itself a comic retelling of the Faust legend.
+
+Genreid: 4 (comedy)
+
+Website URL: https://www.imdb.com/title/tt0230030/?ref_=fn_al_tt_1
+
+Active: N
+
+========================================================================
+POST
+localhost:80/userCheck
+body: {
+    "email":"jiayi@gmail.com",
+    "password":"12345"
+}
+
+
+========================================================================
+POST
+localhost:80/movie
+headers: {
+email: jiayi@gmail.com
+password: 12345}
+
+body:
+{
+    "name":"The Mummy",
+    "description": "The Mummy is a 1999 American action-adventure film written and directed by Stephen Sommers. It is a remake of the 1932 film of the same name, starring Brendan Fraser, Rachel Weisz, John Hannah and Arnold Vosloo in the title role as the reanimated mummy. The film follows adventurer Rick O'Connell as he travels to Hamunaptra, the City of the Dead, with a librarian and her older brother, where they accidentally awaken Imhotep, a cursed high priest with supernatural powers",
+    "Release_Date": "1999/05/07",
+    "Image_URL":"https://upload.wikimedia.org/wikipedia/en/thumb/6/68/The_mummy.jpg/220px-The_mummy.jpg",
+    "GenreId":4,
+    "Active":"N"
+
+}
+
+========================================================================
+POST
+localhost:80/genre
+headers: {
+email: jiayi@gmail.com
+password: 12345}
+
+body:
+{
+    "name":"Dark Comedy 2",
+    "description": "Satire themed and dark environment with some elements of funniness."
+}
+
+========================================================================
+GET
+localhost:80/movie/active
+
+
+========================================================================
+GET (in ascending date)
+localhost:80/movie/substring/g
+
+========================================================================
+GET (in ascending date)
+localhost:80/genre/2
+
+========================================================================
+POST
+localhost:80/userAdd
+Body: {
+   "email":"mrlim@gmail.com",
+   "role":"user",
+   "name":" Mr Lim",
+   "password":"12345"
+}
+
+========================================================================
+GET
+localhost:80/genre
+
+========================================================================
+GET
+http://localhost:80/movie/2
+
+========================================================================
+PUT
+localhost:80/movie/63
+headers: {
+email: jiayi@gmail.com
+password: 12345}
+body: {
+    "name":"The Mummy (1999)",
+    "description": "The Mummy is a 1999 American action-adventure film written and directed by Stephen Sommers. It is a remake of the 1932 film of the same name, starring Brendan Fraser, Rachel Weisz, John Hannah and Arnold Vosloo in the title role as the reanimated mummy. The film follows adventurer Rick O'Connell as he travels to Hamunaptra, the City of the Dead, with a librarian and her older brother, where they accidentally awaken Imhotep, a cursed high priest with supernatural powers",
+    "Release_Date": "1999/05/07",
+    "Image_URL":"https://upload.wikimedia.org/wikipedia/en/thumb/6/68/The_mummy.jpg/220px-The_mummy.jpg",
+    "GenreId":4,
+    "Active":"Y"
+
+}
+
+========================================================================
+DELETE
+localhost:80/movie/62
