@@ -5,86 +5,39 @@ const userDB = require("../model/user")
 const movieDB = require("../model/movie")
 const genreDB = require("../model/genre")
 // for encrypt and decrypt password, we bring the model part of it to app
-const db = require("../model/databaseConfig");
 const bcrypt = require("bcrypt"); // To encrypt user password
+const jwt = require("jsonwebtoken");
+const cors = require("cors");
+const validator = require("validator");
+const sign_key = "abc123";
 
 var app = express();
 
-// For CORS to link the backend to REACT frontend
-var corsOptions = {
-    origin: "http://127.0.0.1:5500"
-};
-
-app.use(cors(corsOptions));
-
-var globalValidate = ""
 
 /* MIDDLEWARE */
-app.use(express.static("./public")); //localhost:3000/about.html
 app.use(express.json()); //[0e 3f ...] -> {"username":....}
-// custom middleware to check if user is admin  // ADVANCED FEATURE
-app.use((req, res, next) => {
-    // "validated" could be true if ROUTER `userCheck` is already called before this.
-    var validated = false;
-    if (globalValidate != true) {
-        validated = false;
+// enable ALL CORS origins to use ALL APIs
+app.use(cors());
+
+// Custom middleware to verify the JWT Authentication
+function verifyToken(req, res, next) {
+    var token = req.headers.authorization;
+
+    if (!token || !token.includes("Bearer ")) {
+        res.status(403).send({ "message": "Authorization token not found" });
     } else {
-        validated = true;
-    }
-    let userEmail = "";
-    let userRole = "";
-    // In middleware, we use the `email` and `password` from headers instead of body.
-    if (req.headers.email != undefined && req.headers.password != undefined) {
-        userDB.getUser(req.headers.email, req.headers.password, (err, result) => {
+        token = token.split("Bearer ")[1];
+        jwt.verify(token, sign_key, (err, decoded) => {
             if (err) {
-                console.log(err)
-                res.status(500);
-                res.send({ message: "Internal Server error" });
+                console.log(err);
+                res.status(500).send({ "message": "Invalid token" });
             } else {
-                res.status(200)
-                var users = result;
-                const promiseArr = [];
-                for (let i = 0; i < users.length; i++) {
-                    // This way is you pull out all the user records and check one by one. Alternatively, you can pass your login details to the sql to check, save time for page load.
-                    const decrypt = bcrypt.compare(req.headers.password, users[i].Password).then(
-                        response => {
-                            // True or False (decrypt returns)
-                            if (users[i].Email.toLowerCase() == req.headers.email.toLowerCase() && response && users[i].Role == "admin") {
-                                validated = true;
-                                userEmail = req.headers.email.toLowerCase();
-                                userRole = users[i].Role
-                            } else {
-                                userEmail = req.headers.email.toLowerCase();
-                                userRole = "not an admin"
-                            }
-                        });
-                    promiseArr.push(decrypt);
-                }
-
-                Promise.all(promiseArr).then(() => {
-                    var resultData = {
-                        message: "User " + userEmail + " is " + userRole,
-                        validated: validated
-                    }
-                    // Use localStorage to store the validation as "True" as soon as the user logs in at ROUTER "userCheck"
-                    globalValidate = validated // true or false (true unless hit admin user)
-                    // use "res.validated" since the result of this should be sent to the req of ROUTER
-                    req.header.validated = validated;
-                    console.log("res validated")
-                    console.log(req.header.validated)
-                    next();
-
-                    // res.send(resultData);
-                });
-
+                req.auth = decoded;
+                next();
             }
-
         })
-    } else {
-        req.header.validated = validated;
-        next();
     }
-})
+}
 
 /* ROUTERS */
 //////////////////// MOVIE
@@ -325,7 +278,7 @@ app.post("/genre", (req, res) => {
 
 //////////////////// USER check
 // Check USER if admin or not
-app.post("/userCheck", (req, res) => {
+app.post("/login", (req, res) => {
     var validated = false;
     let userEmail = "";
     let userRole = "user";
@@ -375,6 +328,38 @@ app.post("/userCheck", (req, res) => {
     }
 })
 
+// Validating token upon log in
+app.post("/login", cors(corsOption), (req, res) => {
+    var { username, password } = req.body;
+
+    userDB.authenticate(username, password, (err, result) => {
+        if (err) {
+            res.status(500).send({ "message": "Interval server error." });
+        } else {
+            if (result.length < 1) {
+                res.status(400).send({ "message": "wrong username / password" })
+            } else {
+                console.log(result);
+                bcrypt.compare(password, result[0].password, (err, hashResult) => {
+                    if (err) {
+                        res.status(500).send({ message: "Internal server error" });
+                    } else {
+                        console.log("Comparison success");
+
+                        var userDetails = {
+                            username: result[0].username,
+                            role: result[0].role
+                        }
+                        var token = jwt.sign(userDetails, sign_key, { expiresIn: "1h" });
+                        res.status(200).send({ "token": token })
+                    }
+                })
+
+            }
+        }
+    })
+    // }
+})
 
 // Create user to add to `user` table in my SQL
 app.post("/userAdd", (req, res) => {
