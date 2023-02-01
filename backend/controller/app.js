@@ -41,9 +41,8 @@ function verifyToken(req, res, next) {
 
 /* ROUTERS */
 //////////////////// MOVIE
-app.get("/movie", (req, res) => {
+app.get("/movie", verifyToken, (req, res) => {
     // GET /movie?limit=###&offset=###
-    console.log(req.headers);
     var limit = 60;
     var offset = 0;
     if (req.query.limit != undefined) {
@@ -66,9 +65,8 @@ app.get("/movie", (req, res) => {
 })
 
 // Get all Active movies
-app.get("/movie/active", (req, res) => {
+app.get("/movie/active", verifyToken, (req, res) => {
     // GET /movie/Active?limit=###&offset=###
-    console.log(req.headers);
     var limit = 60;
     var offset = 0;
     if (req.query.limit != undefined) {
@@ -92,7 +90,7 @@ app.get("/movie/active", (req, res) => {
 })
 
 // Get movies by the substring of movie name
-app.get("/movie/substring/:subString", (req, res) => {
+app.get("/movie/substring/:subString", verifyToken, (req, res) => {
     movieDB.getMovieBySubstring(req.params.subString, (err, result) => {
         if (err) {
             console.log(err);
@@ -106,7 +104,7 @@ app.get("/movie/substring/:subString", (req, res) => {
 })
 
 // Get movies by the GenreId
-app.get("/movie/genreid/:id", (req, res) => {
+app.get("/movie/genreid/:id", verifyToken, (req, res) => {
     movieDB.getMovieByGenreId(req.params.id, (err, result) => {
         if (err) {
             console.log(err);
@@ -120,7 +118,7 @@ app.get("/movie/genreid/:id", (req, res) => {
 })
 
 // Get movies by ID
-app.get("/movie/:id", (req, res) => {
+app.get("/movie/:id", verifyToken, (req, res) => {
     movieDB.getMovieById(req.params.id, (err, result) => {
         if (err) {
             res.status(500);
@@ -168,7 +166,7 @@ app.post("/movie", verifyToken, (req, res) => {
 
 
 // Update movie by ID
-app.put("/movie/:id", (req, res) => {
+app.put("/movie/:id", verifyToken, (req, res) => {
     // If there are missing fields
     if (req.body.name == undefined || req.body.description == undefined || req.body.Release_Date == undefined || req.body.Image_URL == undefined || req.body.GenreId == undefined || req.body.Active == undefined) {
         res.status(500);
@@ -192,10 +190,8 @@ app.put("/movie/:id", (req, res) => {
 })
 
 // Delete movie by ID
-app.delete("/movie/:id", (req, res) => {
-    console.log("req.hedaer.valid")
-    console.log(req.header.validated)
-    if (req.header.validated) {
+app.delete("/movie/:id", verifyToken, (req, res) => {
+    if (req.auth.role == "admin") {
         movieDB.deleteMovie(req.params.id, (err, result) => {
             if (err) {
                 res.status(500);
@@ -206,16 +202,14 @@ app.delete("/movie/:id", (req, res) => {
             }
         })
     } else {
-        res.status(401);
-        res.send({ message: "user not authorized." });
+        res.status(401).send({ message: "Insufficient privileges" })
     }
 })
 
 //////////////////// GENRE
 // get all genre details
-app.get("/genre", (req, res) => {
+app.get("/genre", verifyToken, (req, res) => {
     // GET /movie?limit=###&offset=###
-    console.log(req.headers);
     var limit = 60;
     var offset = 0;
     if (req.query.limit != undefined) {
@@ -238,7 +232,7 @@ app.get("/genre", (req, res) => {
 })
 
 // Get genre by genreId
-app.get("/genre/:id", (req, res) => {
+app.get("/genre/:id", verifyToken, (req, res) => {
     genreDB.getGenreById(req.params.id, (err, result) => {
         if (err) {
             console.log(err);
@@ -253,37 +247,30 @@ app.get("/genre/:id", (req, res) => {
 
 // Create genre
 app.post("/genre", verifyToken, (req, res) => {
-    console.log("current validated at genre")
-    console.log(req.validated) // if you used "res.validated" in middleware, use "req.validated" at router
-    if (req.header.validated) {
-        // If there are some missing fields
-        if (req.body.name == undefined || req.body.description == undefined) {
-            res.status(500);
-            res.send({ message: "Missing fields from body" });
-        } else {
-            // If there are no missing fields
-            if (req.auth.role == "admin") {
-                genreDB.createGenre(req.body, (err, result) => {
-                    if (err) {
-                        res.status(500);
-                        res.send({ message: "Internal Server Error" });
-                    } else {
-                        res.status(201);
-                        res.send({ message: "Genre ID - " + result.insertId + " created" });
-                    }
-                })
-            } else {
-                res.status(401).send({ message: "Insufficient privileges" })
-            }
-        }
+    // If there are some missing fields
+    if (req.auth.name == undefined || req.auth.description == undefined) {
+        res.status(500);
+        res.send({ message: "Missing fields from body" });
     } else {
-        res.status(401);
-        res.send({ message: "user not authorized." });
+        // If there are no missing fields
+        if (req.auth.role == "admin") {
+            genreDB.createGenre(req.body, (err, result) => {
+                if (err) {
+                    res.status(500);
+                    res.send({ message: "Internal Server Error" });
+                } else {
+                    res.status(201);
+                    res.send({ message: "Genre ID - " + result.insertId + " created" });
+                }
+            })
+        } else {
+            res.status(401).send({ message: "Insufficient privileges" })
+        }
     }
 })
 
 // Delete Genre by ID
-app.delete("/genre/:id", (req, res) => {
+app.delete("/genre/:id", verifyToken, (req, res) => {
     if (req.auth.role == "admin") {
         genreDB.deleteGenre(req.params.id, (err, result) => {
             if (err) {
@@ -302,7 +289,7 @@ app.delete("/genre/:id", (req, res) => {
 //////////////////// USER check
 
 // Validating token upon log in
-app.post("/login", cors(corsOption), (req, res) => {
+app.post("/login", (req, res) => {
     // No missing fields allowed
     if (req.body.email == undefined || req.body.password == undefined) {
         res.status(500);
@@ -341,27 +328,30 @@ app.post("/login", cors(corsOption), (req, res) => {
 })
 
 // Create user to add to `user` table in my SQL
-app.post("/userAdd", (req, res) => {
-    if (req.body.email == undefined || req.body.name == undefined || req.body.role == undefined || req.body.password == undefined) {
+app.post("/userAdd", verifyToken, (req, res) => {
+    if (req.auth.email == undefined || req.auth.name == undefined || req.auth.role == undefined || req.auth.password == undefined) {
         res.status(500);
         res.send({ message: "Missing fields from body" });
     } else {
-        // Hashing the Passwords
-        // Hashed 2^10 times
-        bcrypt.hash(req.body.password, 10).then(
-            response => {
-                userDB.createUser(req.body, response, (err, result) => {
-                    if (err) {
-                        res.status(500);
-                        res.send({ message: "Internal Server Error" });
-                    } else {
-                        res.status(201);
-                        res.send({ message: "Genre ID - " + result.insertId + " created" });
-                    }
+        // If no missing fields, proceed
+        if (req.auth.role == "admin") {
+            // Hashing the Passwords
+            // Hashed 2^10 times
+            bcrypt.hash(req.auth.password, 10).then(
+                response => {
+                    userDB.createUser(req.auth, response, (err, result) => {
+                        if (err) {
+                            res.status(500);
+                            res.send({ message: "Internal Server Error" });
+                        } else {
+                            res.status(201);
+                            res.send({ message: "Genre ID - " + result.insertId + " created" });
+                        }
+                    })
                 })
-            })
-
-
+        } else {
+            res.status(401).send({ message: "Insufficient privileges" })
+        }
     }
 })
 
