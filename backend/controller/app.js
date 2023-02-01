@@ -7,7 +7,6 @@ const genreDB = require("../model/genre")
 // for encrypt and decrypt password, we bring the model part of it to app
 const bcrypt = require("bcrypt"); // To encrypt user password
 const jwt = require("jsonwebtoken");
-const cors = require("cors");
 const validator = require("validator");
 const sign_key = "abc123";
 
@@ -36,6 +35,18 @@ function verifyToken(req, res, next) {
                 next();
             }
         })
+    }
+}
+
+// Validate if email address given is a real email address format
+function validate(req, res, next) {
+    var username = req.body.username;
+    var password = req.body.password;
+
+    if (validator.isEmail(username) && username.length >= 5) {
+        next();
+    } else {
+        res.send({ message: "Wrong username format, not email - validator" })
     }
 }
 
@@ -246,7 +257,7 @@ app.get("/genre/:id", verifyToken, (req, res) => {
 })
 
 // Create genre
-app.post("/genre", verifyToken, (req, res) => {
+app.post("/genre", validate, verifyToken, (req, res) => {
     // If there are some missing fields
     if (req.auth.name == undefined || req.auth.description == undefined) {
         res.status(500);

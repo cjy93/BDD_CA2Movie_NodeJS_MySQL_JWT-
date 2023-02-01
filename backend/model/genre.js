@@ -74,7 +74,7 @@ genreDB.createGenre = (genreDetails, callback) => {
 
 // Delete Genre
 // As movies have a foreign key to "genreId" in genre table. if you delete a genreId, the effect will cascade to the movie table.
-movieDB.deleteGenre = (genre_id, callback) => {
+genreDB.deleteGenre = (genre_id, callback) => {
     //1 - Get the connection
     var conn = db.getConnection();
 
