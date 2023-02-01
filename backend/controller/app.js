@@ -140,13 +140,13 @@ app.get("/movie/:id", (req, res) => {
 
 
 // Create movie
-app.post("/movie", (req, res) => {
-    //if (req.headers.validated) { //
-    if (req.header.validated) {
-        if (req.body.name == undefined || req.body.description == undefined || req.body.Release_Date == undefined || req.body.Image_URL == undefined || req.body.GenreId == undefined || req.body.Active == undefined) {
-            res.status(500);
-            res.send({ message: "Missing fields from body" });
-        } else {
+app.post("/movie", verifyToken, (req, res) => {
+    if (req.body.name == undefined || req.body.description == undefined || req.body.Release_Date == undefined || req.body.Image_URL == undefined || req.body.GenreId == undefined || req.body.Active == undefined) {
+        res.status(500);
+        res.send({ message: "Missing fields from body" });
+    } else {
+        // No missing fields, now check if user is "admin"
+        if (req.auth.role == "admin") {
             movieDB.createMovie(req.body, (err, result) => {
                 if (err) {
                     res.status(500);
@@ -159,21 +159,22 @@ app.post("/movie", (req, res) => {
                     });
                 }
             })
+        } else {
+            // If user is not "admin"
+            res.status(401).send({ message: "Insufficient privileges" })
         }
-    } else {
-        res.status(401);
-        res.send({ message: "user not authorized." });
     }
 })
 
 
 // Update movie by ID
 app.put("/movie/:id", (req, res) => {
-    if (req.header.validated) {
-        if (req.body.name == undefined || req.body.description == undefined || req.body.Release_Date == undefined || req.body.Image_URL == undefined || req.body.GenreId == undefined || req.body.Active == undefined) {
-            res.status(500);
-            res.send({ message: "Missing fields from body" });
-        } else {
+    // If there are missing fields
+    if (req.body.name == undefined || req.body.description == undefined || req.body.Release_Date == undefined || req.body.Image_URL == undefined || req.body.GenreId == undefined || req.body.Active == undefined) {
+        res.status(500);
+        res.send({ message: "Missing fields from body" });
+    } else {
+        if (req.auth.role == "admin") {
             movieDB.updateMovie(req.body, req.params.id, (err, result) => {
                 if (err) {
                     res.status(500);
@@ -183,10 +184,9 @@ app.put("/movie/:id", (req, res) => {
                     res.send({ message: "Movie ID - " + req.params.id + " updated" });
                 }
             })
+        } else {
+            res.status(401).send({ message: "Insufficient privileges" })
         }
-    } else {
-        res.status(401);
-        res.send({ message: "user not authorized." });
     }
 
 })
@@ -252,23 +252,29 @@ app.get("/genre/:id", (req, res) => {
 })
 
 // Create genre
-app.post("/genre", (req, res) => {
+app.post("/genre", verifyToken, (req, res) => {
     console.log("current validated at genre")
     console.log(req.validated) // if you used "res.validated" in middleware, use "req.validated" at router
     if (req.header.validated) {
+        // If there are some missing fields
         if (req.body.name == undefined || req.body.description == undefined) {
             res.status(500);
             res.send({ message: "Missing fields from body" });
         } else {
-            genreDB.createGenre(req.body, (err, result) => {
-                if (err) {
-                    res.status(500);
-                    res.send({ message: "Internal Server Error" });
-                } else {
-                    res.status(201);
-                    res.send({ message: "Genre ID - " + result.insertId + " created" });
-                }
-            })
+            // If there are no missing fields
+            if (req.auth.role == "admin") {
+                genreDB.createGenre(req.body, (err, result) => {
+                    if (err) {
+                        res.status(500);
+                        res.send({ message: "Internal Server Error" });
+                    } else {
+                        res.status(201);
+                        res.send({ message: "Genre ID - " + result.insertId + " created" });
+                    }
+                })
+            } else {
+                res.status(401).send({ message: "Insufficient privileges" })
+            }
         }
     } else {
         res.status(401);
@@ -276,89 +282,62 @@ app.post("/genre", (req, res) => {
     }
 })
 
-//////////////////// USER check
-// Check USER if admin or not
-app.post("/login", (req, res) => {
-    var validated = false;
-    let userEmail = "";
-    let userRole = "user";
-    if (req.body.email == undefined || req.body.password == undefined) {
-        res.status(500);
-        res.send({ message: "Missing fields from body" });
-    } else {
-        userDB.getUser(req.body.email, req.body.password, (err, result) => {
+// Delete Genre by ID
+app.delete("/genre/:id", (req, res) => {
+    if (req.auth.role == "admin") {
+        genreDB.deleteGenre(req.params.id, (err, result) => {
             if (err) {
                 res.status(500);
                 res.send({ message: "Internal Server Error" });
             } else {
                 res.status(200);
-                var users = result;
-                const promiseArr = [];
-                for (let i = 0; i < users.length; i++) {
-                    // This way is you pull out all the user records and check one by one. Alternatively, you can pass your login details to the sql to check, save time for page load.
-                    const decrypt = bcrypt.compare(req.body.password, users[i].Password).then(
-                        response => {
-                            // True or False (decrypt returns)
-                            if (users[i].Email.toLowerCase() == req.body.email.toLowerCase() && response && users[i].Role == "admin") {
-                                validated = true;
-                                userEmail = req.body.email.toLowerCase();
-                                req.headers.validated = validated;
-                                userRole = users[i].Role
-                            } else {
-                                if (validated == false) {
-                                    userEmail = req.body.email.toLowerCase();
-                                    userRole = "profile is not admin"
-                                }
-                            }
-                        });
-                    promiseArr.push(decrypt);
-                }
-
-                Promise.all(promiseArr).then(() => {
-                    let resultData = {
-                        message: "User " + userEmail + " is " + userRole,
-                        validated: validated
-                    }
-                    // Use localStorage to store the validation as "True" as soon as the user logs in at ROUTER "userCheck"
-                    globalValidate = validated // true or false (true unless hit admin user)
-                    res.send(resultData);
-                });
+                res.send({ message: "Genre ID - " + req.params.id + " deleted" });
             }
         })
+    } else {
+        res.status(401).send({ message: "Insufficient privileges" })
     }
 })
 
+//////////////////// USER check
+
 // Validating token upon log in
 app.post("/login", cors(corsOption), (req, res) => {
-    var { username, password } = req.body;
-
-    userDB.authenticate(username, password, (err, result) => {
-        if (err) {
-            res.status(500).send({ "message": "Interval server error." });
-        } else {
-            if (result.length < 1) {
-                res.status(400).send({ "message": "wrong username / password" })
+    // No missing fields allowed
+    if (req.body.email == undefined || req.body.password == undefined) {
+        res.status(500);
+        res.send({ message: "Missing fields from body" });
+    } else {
+        // If there are no missing fields, proceed
+        var { username, password } = req.body;
+        userDB.authenticate(username, password, (err, result) => {
+            if (err) {
+                res.status(500).send({ "message": "Interval server error." });
             } else {
-                console.log(result);
-                bcrypt.compare(password, result[0].password, (err, hashResult) => {
-                    if (err) {
-                        res.status(500).send({ message: "Internal server error" });
-                    } else {
-                        console.log("Comparison success");
-
-                        var userDetails = {
-                            username: result[0].username,
-                            role: result[0].role
+                if (result.length < 1) {
+                    res.status(400).send({ "message": "wrong username / password" })
+                } else {
+                    console.log(result);
+                    bcrypt.compare(password, result[0].password, (err, hashResult) => {
+                        if (err) {
+                            res.status(500).send({ message: "Internal server error" });
+                        } else {
+                            console.log("Comparison success");
+                            console.log(result)
+                            // Email is unique, so there will be only one item in "result"
+                            var userDetails = {
+                                username: result[0].username.toLowerCase(),
+                                role: result[0].role
+                            }
+                            var token = jwt.sign(userDetails, sign_key, { expiresIn: "1h" });
+                            res.status(200).send({ "token": token })
                         }
-                        var token = jwt.sign(userDetails, sign_key, { expiresIn: "1h" });
-                        res.status(200).send({ "token": token })
-                    }
-                })
+                    })
 
+                }
             }
-        }
-    })
-    // }
+        })
+    }
 })
 
 // Create user to add to `user` table in my SQL

@@ -55,9 +55,9 @@ userDB.createUser = (userDetails, hash, callback) => {
 userDB.authenticate = (username, password, callback) => {
     var conn = db.getConnection();
     // Email is unique
-    var sqlStmt = "SELECT * FROM bdd_ca1.user WHERE Email = ?";
+    var sqlStmt = "SELECT * FROM bdd_ca1.user WHERE LOWER(Email) = ?";
 
-    conn.query(sqlStmt, [username, password], (err, result) => {
+    conn.query(sqlStmt, [username.toLowerCase(), password], (err, result) => {
         conn.end();
 
         if (err) {

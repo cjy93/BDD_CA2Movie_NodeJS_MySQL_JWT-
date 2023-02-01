@@ -72,7 +72,31 @@ genreDB.createGenre = (genreDetails, callback) => {
     })
 }
 
-// Did not add delete genre query since movies have a foreign key to "genreId" in genre table. if you delete a genreId, the effect will cascade to the movie table.
+// Delete Genre
+// As movies have a foreign key to "genreId" in genre table. if you delete a genreId, the effect will cascade to the movie table.
+movieDB.deleteGenre = (genre_id, callback) => {
+    //1 - Get the connection
+    var conn = db.getConnection();
+
+    //2 - Specify SQL string/statement (Multiple statements)
+    var sqlStmt = "insert into bdd_ca1.log_deletegenres SELECT * from bdd_ca1.genre g WHERE g.genreId=?; DELETE FROM bdd_ca1.genre WHERE genreId = ?;";
+
+    //3 - Execute query-connection
+    conn.query(sqlStmt, [genre_id, genre_id], (err, result) => {
+        //4 - End connection
+        conn.end();
+
+        //5 - React to error or result state/object
+        if (err) {
+            console.log(err);
+            return callback(err, null);
+        } else {
+            return callback(null, result);
+
+        }
+    })
+}
+
 
 
 module.exports = genreDB;
