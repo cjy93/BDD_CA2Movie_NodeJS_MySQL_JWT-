@@ -1,0 +1,27 @@
+body{
+    background:black !important;
+    color:white !important;
+}
+
+a:link {
+    text-decoration: underline !important;
+    color: lightskyblue !important;
+  }
+  
+  a:hover {
+    color: red;
+    background-color: transparent !important;
+    text-decoration: underline !important;
+  }
+  
+  a:active {
+    color: yellow;
+    background-color: transparent !important;
+    text-decoration: underline !important;
+  }
+
+
+  button.hide{
+    display: None !important;
+  }
+

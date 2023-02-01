@@ -1,0 +1,4 @@
+*.doc
+*.docx
+*.config
+**/node_modules/

@@ -1,8 +1,12 @@
 
 // webpack.config.js
+
+const { ProvidePlugin } = require('webpack'); // Remember to import
 module.exports = {
     entry: {
-        App: './output/App_Assignment1_P7337992.js',
+        App_ca1: './output/App_Assignment1_P7337992.js',
+        App_ca2: './output/App_Assignment2_P7337992.js',
+        App: './output/App.js'
     },
     output: {
         // default output to ./dist folder
@@ -11,16 +15,34 @@ module.exports = {
     mode: 'development',
     watch: true,
     // add rules to enable import css based on :https://blog.jakoblind.no/css-modules-webpack/ 
+    // module: {
+    //     rules: [
+    //         {
+    //             test: /\.css$/,
+    //             loader: [
+    //                 'style-loader',
+    //                 'css-loader'
+    //             ],
+    //             options: {
+    //                 import: true,
+    //             }
+    //         }
+    //     ]
+    // },
     module: {
         rules: [
             {
-                test: /\.css$/,
-                use: [
-                    'style-loader',
-                    'css-loader'
-                ]
-            }
-        ]
-    }
+                test: /\.css$/i,
+                use: ["style-loader", "css-loader"],
+            },
+        ],
+    },
+    // Add plugins
+    plugins: [
+        new ProvidePlugin({
+            React: 'react',
+            ReactDOM: 'react-dom/client'
+        }),
+    ],
 
 };
