@@ -52,7 +52,8 @@ function validate(req, res, next) {
 
 /* ROUTERS */
 //////////////////// MOVIE
-app.get("/movie", verifyToken, (req, res) => {
+// get all movies
+app.get("/movie", (req, res) => {
     // GET /movie?limit=###&offset=###
     var limit = 60;
     var offset = 0;
@@ -76,7 +77,7 @@ app.get("/movie", verifyToken, (req, res) => {
 })
 
 // Get all Active movies
-app.get("/movie/active", verifyToken, (req, res) => {
+app.get("/movie/active", (req, res) => {
     // GET /movie/Active?limit=###&offset=###
     var limit = 60;
     var offset = 0;
@@ -101,7 +102,7 @@ app.get("/movie/active", verifyToken, (req, res) => {
 })
 
 // Get movies by the substring of movie name
-app.get("/movie/substring/:subString", verifyToken, (req, res) => {
+app.get("/movie/substring/:subString", (req, res) => {
     movieDB.getMovieBySubstring(req.params.subString, (err, result) => {
         if (err) {
             console.log(err);
@@ -115,7 +116,7 @@ app.get("/movie/substring/:subString", verifyToken, (req, res) => {
 })
 
 // Get movies by the GenreId
-app.get("/movie/genreid/:id", verifyToken, (req, res) => {
+app.get("/movie/genreid/:id", (req, res) => {
     movieDB.getMovieByGenreId(req.params.id, (err, result) => {
         if (err) {
             console.log(err);
@@ -219,7 +220,7 @@ app.delete("/movie/:id", verifyToken, (req, res) => {
 
 //////////////////// GENRE
 // get all genre details
-app.get("/genre", verifyToken, (req, res) => {
+app.get("/genre", (req, res) => {
     // GET /movie?limit=###&offset=###
     var limit = 60;
     var offset = 0;
@@ -298,7 +299,30 @@ app.delete("/genre/:id", verifyToken, (req, res) => {
 })
 
 //////////////////// USER check
-
+// Create user to add to `user` table in my SQL
+app.post("/userAdd", (req, res) => {
+    // If fields are missing
+    if (req.auth.email == undefined || req.auth.name == undefined || req.auth.role == undefined || req.auth.password == undefined) {
+        res.status(500);
+        res.send({ message: "Missing fields from body" });
+    } else {
+        // If no missing fields, proceed
+        // Hashing the Passwords
+        // Hashed 2^10 times
+        bcrypt.hash(req.auth.password, 3).then(
+            response => {
+                userDB.createUser(req.auth, response, (err, result) => {
+                    if (err) {
+                        res.status(500);
+                        res.send({ message: "Internal Server Error" });
+                    } else {
+                        res.status(201);
+                        res.send({ message: "Genre ID - " + result.insertId + " created" });
+                    }
+                })
+            })
+    }
+})
 // Validating token upon log in
 app.post("/login", (req, res) => {
     // No missing fields allowed
@@ -307,25 +331,26 @@ app.post("/login", (req, res) => {
         res.send({ message: "Missing fields from body" });
     } else {
         // If there are no missing fields, proceed
-        var { username, password } = req.body;
-        userDB.authenticate(username, password, (err, result) => {
+        var { email, password } = req.body;
+        console.log(password)
+        userDB.authenticate(email, (err, result) => {
             if (err) {
                 res.status(500).send({ "message": "Interval server error." });
             } else {
                 if (result.length < 1) {
-                    res.status(400).send({ "message": "wrong username / password" })
+                    res.status(400).send({ "message": "No such user" })
                 } else {
                     console.log(result);
-                    bcrypt.compare(password, result[0].password, (err, hashResult) => {
+                    bcrypt.compare(password, result[0].Password, (err, hashResult) => {
                         if (err) {
-                            res.status(500).send({ message: "Internal server error" });
+                            res.status(500).send({ message: "Wrong password provided" });
                         } else {
                             console.log("Comparison success");
                             console.log(result)
                             // Email is unique, so there will be only one item in "result"
                             var userDetails = {
-                                username: result[0].username.toLowerCase(),
-                                role: result[0].role
+                                email: result[0].Email.toLowerCase(),
+                                role: result[0].Role
                             }
                             var token = jwt.sign(userDetails, sign_key, { expiresIn: "1h" });
                             res.status(200).send({ "token": token })
@@ -337,35 +362,6 @@ app.post("/login", (req, res) => {
         })
     }
 })
-
-// Create user to add to `user` table in my SQL
-app.post("/userAdd", verifyToken, (req, res) => {
-    if (req.auth.email == undefined || req.auth.name == undefined || req.auth.role == undefined || req.auth.password == undefined) {
-        res.status(500);
-        res.send({ message: "Missing fields from body" });
-    } else {
-        // If no missing fields, proceed
-        if (req.auth.role == "admin") {
-            // Hashing the Passwords
-            // Hashed 2^10 times
-            bcrypt.hash(req.auth.password, 10).then(
-                response => {
-                    userDB.createUser(req.auth, response, (err, result) => {
-                        if (err) {
-                            res.status(500);
-                            res.send({ message: "Internal Server Error" });
-                        } else {
-                            res.status(201);
-                            res.send({ message: "Genre ID - " + result.insertId + " created" });
-                        }
-                    })
-                })
-        } else {
-            res.status(401).send({ message: "Insufficient privileges" })
-        }
-    }
-})
-
 
 
 module.exports = app;

@@ -52,12 +52,12 @@ userDB.createUser = (userDetails, hash, callback) => {
 }
 
 // Authenticate if the token provided by user matches the database
-userDB.authenticate = (username, password, callback) => {
+userDB.authenticate = (email, callback) => {
     var conn = db.getConnection();
     // Email is unique
     var sqlStmt = "SELECT * FROM bdd_ca1.user WHERE LOWER(Email) = ?";
 
-    conn.query(sqlStmt, [username.toLowerCase(), password], (err, result) => {
+    conn.query(sqlStmt, [email.toLowerCase()], (err, result) => {
         conn.end();
 
         if (err) {
