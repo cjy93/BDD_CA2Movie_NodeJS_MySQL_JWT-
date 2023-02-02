@@ -1,10 +1,9 @@
 # POST genre , with VERIFYTOKEN
 => localhost/genre
 body:
-{"name":"illusion",
-"description":"illusions of the world… meant for BDD test!"
+{"name":"illusion2",
+"description":"illusions2 of the world… meant for BDD test!"
 }
-
 
 # GET genre 
 => localhost/genre
@@ -17,7 +16,7 @@ body:
 "description":"Software engineering is nothing but illusion…",
 "Release_Date":"2020-01-01",
 "Image_URL":"http://www.abc.com/illusions.jpg",
-"Genre_Id":  <link to the ID created based on new Genre above>,
+"GenreId":  <link to the ID created based on new Genre above>,
 "Active":"Y"
 }
 
@@ -29,7 +28,7 @@ body:
 "description":"Software design patterns is also nothing but illusion…",
 "Release_Date":"2020-01-01",
 "Image_URL":"http://www.abc.com/illusions2.jpg",
-"Genre_Id":  <link to the ID created based on new Genre above>,
+"GenreId":  <link to the ID created based on new Genre above>,
 "Active": "N"
 }
 
@@ -37,12 +36,13 @@ body:
 => localhost/movie/active
 
 # GET movie by genreid
-=> localhost/movie/genreid/20
+=> localhost/movie/genreid/<some num>
 
 # GET all movies with the name containing "illusion"
 => localhost/movie/substring/Illusion
 
 # POST to verify login with valid email and password
+=> localhost/login
 body:
 {
 "email":"jiayi@gmail.com",
@@ -63,7 +63,7 @@ body:
 "description":"222 Software design patterns is also nothing but illusion…",
 "Release_Date":"2022-01-01",
 "Image_URL":"http://www.abc.com/illusions2.jpg",
-"Genre_Id":  <link to the ID created based on new Genre above>,
+"GenreId":  <link to the ID created based on new Genre above>,
 "Active": "N"
 }
 
@@ -83,6 +83,14 @@ body:{
 # DELETE genre by id,  with VERIFYTOKEN
 => localhost/genre/<some number>
 
+# PUT update genre ,  with VERIFYTOKEN
+=> localhost/genre/<some num>
+body:
+{
+"name":"fairytale",
+"description":"artificial environment with non live-like features and fantasies"
+}
+
 # POST create user
 => localhost/userAdd
 body:
@@ -92,4 +100,6 @@ body:
 "role":"user",
 "password":"12345"
 }
+
+
 

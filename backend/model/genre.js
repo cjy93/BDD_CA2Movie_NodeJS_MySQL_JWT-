@@ -98,5 +98,29 @@ genreDB.deleteGenre = (genre_id, callback) => {
 }
 
 
+// Update existing genre on "movie" table and add this previous record to "log_updategenres" table in MySQL
+genreDB.updateGenre = (genreDetails, genre_id, callback) => {
+    //1 - Get the connection
+    var conn = db.getConnection();
+
+    //2 - Specify SQL string/statement (Multiple statements)
+    var sqlStmt = "insert into bdd_ca1.log_updategenres SELECT * from bdd_ca1.genre g WHERE g.genreId=?; UPDATE bdd_ca1.genre  SET name = ?, description = ? WHERE (genreId = ?);    ";
+
+    //3 - Execute query-connection
+    conn.query(sqlStmt, [genre_id, genreDetails.name, genreDetails.description, genre_id], (err, result) => {
+        //4 - End connection
+        conn.end();
+
+        //5 - React to error or result state/object
+        if (err) {
+            console.log(err);
+            return callback(err, null);
+        } else {
+            return callback(null, result);
+
+        }
+    })
+}
+
 
 module.exports = genreDB;

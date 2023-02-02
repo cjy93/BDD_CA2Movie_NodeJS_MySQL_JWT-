@@ -40,10 +40,9 @@ function verifyToken(req, res, next) {
 
 // Validate if email address given is a real email address format
 function validate(req, res, next) {
-    var username = req.body.username;
-    var password = req.body.password;
+    var email = req.body.email;
 
-    if (validator.isEmail(username) && username.length >= 5) {
+    if (validator.isEmail(email) && email.length >= 5) {
         next();
     } else {
         res.send({ message: "Wrong username format, not email - validator" })
@@ -258,9 +257,11 @@ app.get("/genre/:id", (req, res) => {
 })
 
 // Create genre
-app.post("/genre", validate, verifyToken, (req, res) => {
+app.post("/genre", verifyToken, (req, res) => {
+    console.log(req.auth)
+    console.log(req.body)
     // If there are some missing fields
-    if (req.auth.name == undefined || req.auth.description == undefined) {
+    if (req.body.name == undefined || req.body.description == undefined) {
         res.status(500);
         res.send({ message: "Missing fields from body" });
     } else {
@@ -297,6 +298,30 @@ app.delete("/genre/:id", verifyToken, (req, res) => {
     } else {
         res.status(401).send({ message: "Insufficient privileges" })
     }
+})
+
+// Update genre by ID
+app.put("/genre/:id", verifyToken, (req, res) => {
+    // If there are missing fields
+    if (req.body.name == undefined || req.body.description == undefined) {
+        res.status(500);
+        res.send({ message: "Missing fields from body" });
+    } else {
+        if (req.auth.role == "admin") {
+            genreDB.updateGenre(req.body, req.params.id, (err, result) => {
+                if (err) {
+                    res.status(500);
+                    res.send({ message: "Internal Server Error" });
+                } else {
+                    res.status(200);
+                    res.send({ message: "Genre ID - " + req.params.id + " updated" });
+                }
+            })
+        } else {
+            res.status(401).send({ message: "Insufficient privileges" })
+        }
+    }
+
 })
 
 //////////////////// USER check
