@@ -130,7 +130,7 @@ app.get("/movie/genreid/:id", (req, res) => {
 })
 
 // Get movies by ID
-app.get("/movie/:id", verifyToken, (req, res) => {
+app.get("/movie/:id", (req, res) => {
     movieDB.getMovieById(req.params.id, (err, result) => {
         if (err) {
             res.status(500);
@@ -244,7 +244,7 @@ app.get("/genre", (req, res) => {
 })
 
 // Get genre by genreId
-app.get("/genre/:id", verifyToken, (req, res) => {
+app.get("/genre/:id", (req, res) => {
     genreDB.getGenreById(req.params.id, (err, result) => {
         if (err) {
             console.log(err);
@@ -283,6 +283,7 @@ app.post("/genre", validate, verifyToken, (req, res) => {
 
 // Delete Genre by ID
 app.delete("/genre/:id", verifyToken, (req, res) => {
+    console.log(req)
     if (req.auth.role == "admin") {
         genreDB.deleteGenre(req.params.id, (err, result) => {
             if (err) {
@@ -300,24 +301,24 @@ app.delete("/genre/:id", verifyToken, (req, res) => {
 
 //////////////////// USER check
 // Create user to add to `user` table in my SQL
-app.post("/userAdd", (req, res) => {
+app.post("/userAdd", validate, (req, res) => {
     // If fields are missing
-    if (req.auth.email == undefined || req.auth.name == undefined || req.auth.role == undefined || req.auth.password == undefined) {
+    if (req.body.email == undefined || req.body.name == undefined || req.body.role == undefined || req.body.password == undefined) {
         res.status(500);
         res.send({ message: "Missing fields from body" });
     } else {
         // If no missing fields, proceed
         // Hashing the Passwords
         // Hashed 2^10 times
-        bcrypt.hash(req.auth.password, 3).then(
+        bcrypt.hash(req.body.password, 10).then(
             response => {
-                userDB.createUser(req.auth, response, (err, result) => {
+                userDB.createUser(req.body, response, (err, result) => {
                     if (err) {
                         res.status(500);
                         res.send({ message: "Internal Server Error" });
                     } else {
                         res.status(201);
-                        res.send({ message: "Genre ID - " + result.insertId + " created" });
+                        res.send({ message: "User ID - " + result.insertId + " created" });
                     }
                 })
             })

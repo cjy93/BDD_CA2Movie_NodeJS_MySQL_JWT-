@@ -1,0 +1,95 @@
+# POST genre , with VERIFYTOKEN
+=> localhost/genre
+body:
+{"name":"illusion",
+"description":"illusions of the world… meant for BDD test!"
+}
+
+
+# GET genre 
+=> localhost/genre
+
+# POST create movie , with VERIFYTOKEN
+=> localhost/movie
+body:
+{
+"name":"BDD Illusions",
+"description":"Software engineering is nothing but illusion…",
+"Release_Date":"2020-01-01",
+"Image_URL":"http://www.abc.com/illusions.jpg",
+"Genre_Id":  <link to the ID created based on new Genre above>,
+"Active":"Y"
+}
+
+# POST create movie 2 , with VERIFYTOKEN
+=> localhost/movie
+body:
+{
+"name":"BDD Illusions Sequel",
+"description":"Software design patterns is also nothing but illusion…",
+"Release_Date":"2020-01-01",
+"Image_URL":"http://www.abc.com/illusions2.jpg",
+"Genre_Id":  <link to the ID created based on new Genre above>,
+"Active": "N"
+}
+
+# GET all active movies
+=> localhost/movie/active
+
+# GET movie by genreid
+=> localhost/movie/genreid/20
+
+# GET all movies with the name containing "illusion"
+=> localhost/movie/substring/Illusion
+
+# POST to verify login with valid email and password
+body:
+{
+"email":"jiayi@gmail.com",
+"password":"12345"
+}
+
+
+MY TESTS/ CA2 NEW API:
+
+# GET movie by ID 
+=> localhost/movie/2
+
+# PUT update movie by id, with VERIFYTOKEN
+=> localhost/movie/<some number>
+body:
+{
+"name":"BDD Illusions Sequel",
+"description":"222 Software design patterns is also nothing but illusion…",
+"Release_Date":"2022-01-01",
+"Image_URL":"http://www.abc.com/illusions2.jpg",
+"Genre_Id":  <link to the ID created based on new Genre above>,
+"Active": "N"
+}
+
+# DELETE movie by ID, with VERIFYTOKEN
+=> localhost/movie/<some number>
+
+# GET genre by ID
+=> localhost/genre/<some number>
+
+# POST create genre , with VERIFYTOKEN
+=> localhost/genre
+body:{
+"name":"dark satire",
+"description":"dark and horror and comedy in one"
+}
+
+# DELETE genre by id,  with VERIFYTOKEN
+=> localhost/genre/<some number>
+
+# POST create user
+=> localhost/userAdd
+body:
+{
+"email":"dudu@gmail.com",
+"name":"dudu",
+"role":"user",
+"password":"12345"
+}
+
