@@ -75,8 +75,9 @@ body:
 
 # POST create genre , with VERIFYTOKEN
 => localhost/genre
-body:{
-"name":"dark satire",
+body:
+{
+"name":"dark sexy satire",
 "description":"dark and horror and comedy in one"
 }
 
@@ -100,6 +101,17 @@ body:
 "role":"user",
 "password":"12345"
 }
+
+# POST create user WITH WRONG EMAIL TYPE
+=> localhost/userAdd
+body:
+{
+"email":"dudu.com",
+"name":"dudu2",
+"role":"user",
+"password":"12345"
+}
+
 
 
 
