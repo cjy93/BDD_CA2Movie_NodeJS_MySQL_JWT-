@@ -32,7 +32,7 @@ export default function DetailsPage(props) {
 
         // Filter the movie based on its "id" since we have kept the selected movie by movieId equals to component id
 
-        let temp = movies.filter(movie => movie.id == localStorage["movieId"])
+        let temp = movies.filter(movie => movie.movieID == localStorage["movieId"])
         var chosenMovie = temp[0] // take the solo element out of the list
         console.log("chosenMovie")
         console.log(chosenMovie[0])
@@ -40,12 +40,12 @@ export default function DetailsPage(props) {
         try {
             // declare the variables you want to display
             console.log("successfully creating all the page variables")
-            var id = chosenMovie.id
-            var name = chosenMovie.movie
+            var id = chosenMovie.movieID
+            var name = chosenMovie.name
             var year = chosenMovie.year
             var rating = chosenMovie.imdb
             var runtime = chosenMovie.runtime
-            var genres = chosenMovie.genres
+            var genres = chosenMovie.GenreFull
             var storyPlot = chosenMovie.storyPlot
             var actor1 = chosenMovie.actor1
             var actor2 = chosenMovie.actor2
@@ -65,8 +65,8 @@ export default function DetailsPage(props) {
             var actor4_pic = chosenMovie.actor4_pic
             var movie_link = chosenMovie.links
             var youtube = chosenMovie.youtube
-            var release_date = chosenMovie.release_date
-            var poster = chosenMovie.small_posters
+            var release_date = chosenMovie.Release_Date
+            var poster = chosenMovie.Image_URL
             var plot = chosenMovie.Plot
 
         } catch (e) {
