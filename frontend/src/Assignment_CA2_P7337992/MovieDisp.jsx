@@ -5,7 +5,7 @@ import { Col, Card, Form } from 'react-bootstrap';
 import { pin } from './slices/pinSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-
+import MovieDataService from "../services";
 
 export default function MovieDisp(props) {
 
@@ -45,7 +45,15 @@ export default function MovieDisp(props) {
                                             }}>Pin 📌</button>
                                         {/* Delete each individual movie with button */}
                                         <button variant="primary"
-                                            onClick={() => props.onDelete(index)}>
+                                            onClick={(e) => {
+                                                props.onDelete(index);
+                                                MovieDataService.deleteMovie(movie.movieID).then(response => {
+                                                    if (response.data) {
+                                                        console.log("what is the delete response")
+                                                        console.log(response);
+                                                    }
+                                                });
+                                            }}>
                                             Delete 🗑️
                                         </button>
                                     </Card.Text>

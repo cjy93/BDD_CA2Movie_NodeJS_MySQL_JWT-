@@ -5,6 +5,7 @@ import { Col, Card, Form } from 'react-bootstrap';
 import { pin } from "./slices/pinSlice.js";
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import MovieDataService from "../services.js";
 export default function MovieDisp(props) {
   const dispatch = useDispatch();
   let movies = props.movies;
@@ -44,7 +45,15 @@ export default function MovieDisp(props) {
       }
     }, "Pin \uD83D\uDCCC"), /*#__PURE__*/React.createElement("button", {
       variant: "primary",
-      onClick: () => props.onDelete(index)
+      onClick: e => {
+        props.onDelete(index);
+        MovieDataService.deleteMovie(movie.movieID).then(response => {
+          if (response.data) {
+            console.log("what is the delete response");
+            console.log(response);
+          }
+        });
+      }
     }, "Delete \uD83D\uDDD1\uFE0F")), /*#__PURE__*/React.createElement(BoxClicked, {
       className: "text-dark",
       index: index,

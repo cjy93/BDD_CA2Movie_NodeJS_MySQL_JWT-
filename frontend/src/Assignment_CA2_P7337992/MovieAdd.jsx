@@ -177,8 +177,6 @@ export default function MovieAdd(props) {
                                     if (response.data) {
                                         console.log("what is the response")
                                         console.log(response);
-
-
                                     }
                                 });
                             }}>Add</Button>
