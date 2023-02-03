@@ -17,10 +17,10 @@ export const movieSlice = createSlice({
             // action.payload will be the inputs from the input fields
             // Index for the new elements created by "Add" function. Users do not need to add index, the code will find the next empty integer via "nextId"
             // use `unshift` to push element to front of movie list
-            state.value.unshift(
+            state.value.push(
                 {
-                    id: action.payload.id, movie: action.payload.title, imdb: action.payload.rating, genres: action.payload.genres,
-                    small_posters: action.payload.poster, links: action.payload.url, release_date: action.payload.release
+                    movieID: action.payload.id, name: action.payload.title, imdb: action.payload.rating, GenreId: action.payload.genreId,
+                    Image_URL: action.payload.poster, links: action.payload.url, Release_Date: action.payload.release
                 });
         },
         deleteOne: function (state, action) {

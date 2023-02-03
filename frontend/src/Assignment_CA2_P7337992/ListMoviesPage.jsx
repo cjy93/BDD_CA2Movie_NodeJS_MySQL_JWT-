@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { set } from './slices/movieSlice';
 import { login } from './slices/pageSlice';
 import { Link } from 'react-router-dom';
+import MovieDataService from "../services";
 
 
 // Load in JSON file with Fetch (because file extention is ".json" type)
@@ -45,24 +46,38 @@ export default function ListMovies(props) {
     let my_list
     // Data fetch from standard JSON
     const getData = () => {
-        fetch('/dist/moviesList.json'
-            , {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
+        // return list movies from axios fetch
+        MovieDataService.allMovies().then(response => {
+            if (response.data) {
+                console.log("what is the response")
+                console.log(response);
+                if (response.status == 200) {
+                    my_list = Object.values(response.data)
+                    dispatch(set(my_list));
+                    console.log("movie received successfully from database")
+                } else {
+                    console.log("nothing came in from database")
                 }
             }
-        )
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (myJson) {
-                // Initial movie list is "my_list"
-                my_list = Object.values(myJson)
-                console.log("what is my list")
-                dispatch(set(my_list));
-                console.log(dispatch(set(my_list)).payload)
-            });
+        });
+        // fetch('/dist/moviesList.json'
+        //     , {
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //             'Accept': 'application/json'
+        //         }
+        //     }
+        // )
+        //     .then(function (response) {
+        //         return response.json();
+        //     })
+        //     .then(function (myJson) {
+        //         // Initial movie list is "my_list"
+        //         my_list = Object.values(myJson)
+        //         console.log("what is my list")
+        //         dispatch(set(my_list));
+        //         console.log(dispatch(set(my_list)).payload)
+        //     });
     }
     // fetch data from getData() only once, must use useEffect(()=>{},[]) format to run fetch just once.
     React.useEffect(() => {

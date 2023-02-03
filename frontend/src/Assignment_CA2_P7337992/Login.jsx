@@ -98,10 +98,14 @@ export default function Login(props) {
                             // return login promise
                             MovieDataService.login(userData).then(response => {
                                 if (response.data) {
+                                    // wipe out existing token
+                                    delete localStorage["token"]
                                     console.log("what is the response")
                                     console.log(response);
                                     if (response.status == 200) {
                                         dispatch(login(logout));
+                                        // save new token
+                                        localStorage["token"] = response.data.token;
                                     } else {
                                         alert(invalidMsg);
                                     }

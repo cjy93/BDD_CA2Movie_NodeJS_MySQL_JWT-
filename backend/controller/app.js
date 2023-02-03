@@ -54,7 +54,7 @@ function validate(req, res, next) {
 // get all movies
 app.get("/movie", (req, res) => {
     // GET /movie?limit=###&offset=###
-    var limit = 60;
+    var limit = 200;
     var offset = 0;
     if (req.query.limit != undefined) {
         limit = parseInt(req.query.limit);
@@ -78,7 +78,7 @@ app.get("/movie", (req, res) => {
 // Get all Active movies
 app.get("/movie/active", (req, res) => {
     // GET /movie/Active?limit=###&offset=###
-    var limit = 60;
+    var limit = 200;
     var offset = 0;
     if (req.query.limit != undefined) {
         limit = parseInt(req.query.limit);
@@ -378,7 +378,7 @@ app.post("/login", (req, res) => {
                                 email: result[0].Email.toLowerCase(),
                                 role: result[0].Role
                             }
-                            var token = jwt.sign(userDetails, sign_key, { expiresIn: "1h" });
+                            var token = jwt.sign(userDetails, sign_key, { expiresIn: "2h" });
                             res.status(200).send({ "token": token })
                         }
                     })

@@ -44,11 +44,11 @@ export default function MovieRetrieve(props) {
   //  Sort the movies into respective lists based on whether it was before May or after May (the month). ALl movies are from 2022, so no need to sort by year.
   movies.forEach(function (movie, index) {
     // Use "try" "catch" incase variable movie.release_date is null
-    if (movie.release_date.length > 0) {
-      if (mappingDate[movie.release_date.substr(0, 3)] > 3) {
+    if (movie.Release_Date.length > 0) {
+      if (mappingDate[movie.Release_Date.substr(0, 3)] > 3) {
         // pull out first 3 characters of a string
         filteredNew.push(movie);
-      } else if (mappingDate[movie.release_date.substr(0, 3)] <= 3) {
+      } else if (mappingDate[movie.Release_Date.substr(0, 3)] <= 3) {
         filteredOld.push(movie);
       }
     } else {
@@ -76,9 +76,11 @@ export default function MovieRetrieve(props) {
     if (filteredList.length > 0) {
       filteredList.forEach(function (movie, index) {
         // split by commas and strip empty spaces. There are genre data that appears like "Action, Thriller, Comedy" instead of just single genre like "Action"
-        const myArray = movie.genres.split(",").map(item => item.trim());
-        // push the list of genres into an overall list
-        allRemainGenres.push(myArray);
+        if (movie.GenreFull != undefined) {
+          const myArray = movie.GenreFull.split(",").map(item => item.trim());
+          // push the list of genres into an overall list
+          allRemainGenres.push(myArray);
+        }
       });
       // Flatten the list (since each movie gives a list of genres)
       let flatGenres = [].concat.apply([], allRemainGenres);
@@ -98,8 +100,10 @@ export default function MovieRetrieve(props) {
     filteredLevel1.forEach(function (movie, index) {
       // take each movie.genre as a string.
       // As some of them have more than one genre, it is troublesome to do exact string match. So, do a substring match
-      if (movie.genres.includes(genre) && genre != "None") {
-        filteredList2.push(movie);
+      if (movie.GenreFull != undefined) {
+        if (movie.GenreFull.includes(genre) && genre != "None") {
+          filteredList2.push(movie);
+        }
       }
     });
 
@@ -130,15 +134,17 @@ export default function MovieRetrieve(props) {
   var filteredLevel4 = [];
   if (filteredLevel3.length > 0) {
     filteredLevel3.forEach(function (movie, index) {
-      if (movie.movie.toLowerCase().includes(String(searchInput).toLowerCase())) {
+      if (movie.name.toLowerCase().includes(String(searchInput).toLowerCase())) {
         filteredLevel4.push(movie);
       }
     });
   } else if (filteredLevel2.length > 0) {
     // Only reason if filteredLevel3 is empty is if filteredLevel1 is empty. Do need check filteredLevel1 as filteredLevel2 as it is build on top of filterlevel1
     movies.forEach(function (movie1, index) {
-      if (movie1.movie.toLowerCase().includes(String(searchInput).toLowerCase())) {
-        filteredList4.push(movie1);
+      if (movie1.name != undefined) {
+        if (movie1.name.toLowerCase().includes(String(searchInput).toLowerCase())) {
+          filteredList4.push(movie1);
+        }
       }
     });
     var filteredLevel4 = filteredList4;

@@ -21,23 +21,23 @@ export default function MovieDisp(props) {
       }
     }, /*#__PURE__*/React.createElement(Card.Img, {
       variant: "top",
-      src: movie.small_posters
+      src: movie.Image_URL
     }), /*#__PURE__*/React.createElement(Card.Body, null, /*#__PURE__*/React.createElement(Card.Title, {
       className: "text-dark"
     }, /*#__PURE__*/React.createElement("a", {
       href: movie.links,
       target: "_blank"
-    }, movie.movie)), /*#__PURE__*/React.createElement(Card.Text, {
+    }, movie.name)), /*#__PURE__*/React.createElement(Card.Text, {
       className: "text-dark"
-    }, "[Date Released: ", movie.release_date, "] (", emoji, movie.imdb, "%)", /*#__PURE__*/React.createElement(Link, {
-      to: `/details/${movie['id']}`
+    }, "[Date Released: ", movie.Release_Date, "] (", emoji, movie.imdb, "%)", /*#__PURE__*/React.createElement(Link, {
+      to: `/details/${movie['movieID']}`
     }, /*#__PURE__*/React.createElement("button", {
       onClick: () => {
         // pass localStorage to "RootPage.jsx" as RootPage did not iterate across Index, so cannot receive data unless with localStorage
-        localStorage['movieId'] = movie['id'];
+        localStorage['movieId'] = movie['movieID'];
       }
     }, "Details page! \uD83D\uDCD4")), "\xA0", /*#__PURE__*/React.createElement("button", {
-      className: pinned.includes(parseInt(movie.id)) ? 'hide' : '' // hide pin button if it is pinned
+      className: pinned.includes(parseInt(movie.movieID)) ? 'hide' : '' // hide pin button if it is pinned
       ,
       onClick: () => {
         dispatch(pin(movie));

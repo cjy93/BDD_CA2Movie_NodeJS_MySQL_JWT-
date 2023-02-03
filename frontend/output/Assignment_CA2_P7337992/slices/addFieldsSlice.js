@@ -5,8 +5,10 @@ export const addfieldsSlice = createSlice({
   initialState: {
     value: {
       title: "",
+      description: "",
+      active: "",
       rating: 0,
-      genres: "",
+      genreId: "",
       poster: "",
       url: "",
       release: ""

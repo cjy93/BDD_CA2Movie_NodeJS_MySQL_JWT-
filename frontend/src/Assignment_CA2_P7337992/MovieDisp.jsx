@@ -28,19 +28,19 @@ export default function MovieDisp(props) {
                         {/* Write details in each card */}
                         <Col md="3">
                             <Card style={{ width: '14rem' }}>
-                                <Card.Img variant="top" src={movie.small_posters} />
+                                <Card.Img variant="top" src={movie.Image_URL} />
                                 <Card.Body>
-                                    <Card.Title className="text-dark">{<a href={movie.links} target="_blank">{movie.movie}</a>}</Card.Title>
+                                    <Card.Title className="text-dark">{<a href={movie.links} target="_blank">{movie.name}</a>}</Card.Title>
                                     <Card.Text className="text-dark">
-                                        [Date Released: {movie.release_date}] ({emoji}
+                                        [Date Released: {movie.Release_Date}] ({emoji}
                                         {movie.imdb}%)
-                                        <Link to={`/details/${movie['id']}`}><button onClick={() => {
+                                        <Link to={`/details/${movie['movieID']}`}><button onClick={() => {
                                             // pass localStorage to "RootPage.jsx" as RootPage did not iterate across Index, so cannot receive data unless with localStorage
-                                            localStorage['movieId'] = movie['id'];
+                                            localStorage['movieId'] = movie['movieID'];
                                         }}>Details page! 📔</button></Link>
                                         &nbsp;
                                         <button
-                                            className={pinned.includes(parseInt(movie.id)) ? 'hide' : ''} // hide pin button if it is pinned
+                                            className={pinned.includes(parseInt(movie.movieID)) ? 'hide' : ''} // hide pin button if it is pinned
                                             onClick={() => {
                                                 dispatch(pin(movie));
                                             }}>Pin 📌</button>
