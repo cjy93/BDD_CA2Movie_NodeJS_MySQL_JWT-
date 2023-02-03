@@ -31,8 +31,7 @@ export default function MovieDisp(props) {
                                 <Card.Img variant="top" src={movie.Image_URL} />
                                 <Card.Body>
                                     <Card.Title className="text-dark">{<a href={movie.links} target="_blank">{movie.name}</a>}</Card.Title>
-                                    <Card.Text className="text-dark">
-                                        [Date Released: {movie.Release_Date}] ({emoji}
+                                    <Card.Text className="text-dark">[Date Released: {movie.Release_Date}] ({emoji}
                                         {movie.imdb}%)
                                         <Link to={`/details/${movie['movieID']}`}><button onClick={() => {
                                             // pass localStorage to "RootPage.jsx" as RootPage did not iterate across Index, so cannot receive data unless with localStorage

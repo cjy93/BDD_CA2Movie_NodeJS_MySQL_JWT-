@@ -115,6 +115,7 @@ export default function MovieAdd(props) {
                                 console.log("did it reach formsleect");
                                 return < option value={item} > {item}</option>
                             })} */}
+                            <option value="Choose">Choose</option>
                             {keysGenre.map(function (object, i) {
                                 return < option value={object} > {object}</option>;
                             })}
@@ -154,7 +155,9 @@ export default function MovieAdd(props) {
                             value={active}
                             onChange={(e) => { dispatch(addfields({ title: title, description: description, rating: rating, genreId: genreId, poster: poster, url: url, release: release, active: e.target.value })) }}
                             placeholder=""
-                        ><option value="N">N</option>
+                        >
+                            <option value="Choose">Choose</option>
+                            <option value="N">N</option>
                             <option value="Y">Y</option>
                         </Form.Select>
                     </Form.Group>
@@ -163,7 +166,10 @@ export default function MovieAdd(props) {
                             onClick={() => {
                                 // Index for the new elements created by "Add" function. Users do not need to add index, the code will find the next empty integer via "nextId"
                                 let nextId = movies.length - 1;
-                                let newId = nextId++
+                                let newId = nextId++;
+                                // Update Redux
+                                dispatch(add({ newId: newId, title: title, rating: rating, genreId: genreId, poster: poster, url: url, release: release }));
+
                                 // Update Database backend
                                 const bodyData = { movieID: newId, name: title, description: description, imdb: rating, GenreId: genreId, Image_URL: poster, links: url, Release_Date: release, Active: active, GenreFull: genreidMap[genreId] }
 
@@ -172,9 +178,7 @@ export default function MovieAdd(props) {
                                         console.log("what is the response")
                                         console.log(response);
 
-                                        // Update Redux
-                                        let newId = nextId++
-                                        dispatch(add({ newId: newId, title: title, rating: rating, genreId: genreId, poster: poster, url: url, release: release }))
+
                                     }
                                 });
                             }}>Add</Button>

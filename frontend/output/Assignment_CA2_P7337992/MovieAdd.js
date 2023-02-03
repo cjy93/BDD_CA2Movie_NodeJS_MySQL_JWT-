@@ -165,7 +165,9 @@ export default function MovieAdd(props) {
     },
     required: true,
     placeholder: "required"
-  }, keysGenre.map(function (object, i) {
+  }, /*#__PURE__*/React.createElement("option", {
+    value: "Choose"
+  }, "Choose"), keysGenre.map(function (object, i) {
     return /*#__PURE__*/React.createElement("option", {
       value: object
     }, " ", object);
@@ -242,6 +244,8 @@ export default function MovieAdd(props) {
     },
     placeholder: ""
   }, /*#__PURE__*/React.createElement("option", {
+    value: "Choose"
+  }, "Choose"), /*#__PURE__*/React.createElement("option", {
     value: "N"
   }, "N"), /*#__PURE__*/React.createElement("option", {
     value: "Y"
@@ -251,6 +255,17 @@ export default function MovieAdd(props) {
       // Index for the new elements created by "Add" function. Users do not need to add index, the code will find the next empty integer via "nextId"
       let nextId = movies.length - 1;
       let newId = nextId++;
+      // Update Redux
+      dispatch(add({
+        newId: newId,
+        title: title,
+        rating: rating,
+        genreId: genreId,
+        poster: poster,
+        url: url,
+        release: release
+      }));
+
       // Update Database backend
       const bodyData = {
         movieID: newId,
@@ -268,18 +283,6 @@ export default function MovieAdd(props) {
         if (response.data) {
           console.log("what is the response");
           console.log(response);
-
-          // Update Redux
-          let newId = nextId++;
-          dispatch(add({
-            newId: newId,
-            title: title,
-            rating: rating,
-            genreId: genreId,
-            poster: poster,
-            url: url,
-            release: release
-          }));
         }
       });
     }
