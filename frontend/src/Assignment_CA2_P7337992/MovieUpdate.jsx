@@ -133,6 +133,8 @@ export default function MovieUpdate(props) {
                                         onKeyDown={(e) => restrictAlphabets(e)}
                                     />
                                 </Form.Group >
+                            </Row>
+                            <Row className="mb-3">
                                 <Form.Group as={Col}>
                                     <Form.Label>Genre:</Form.Label>
                                     <Form.Select

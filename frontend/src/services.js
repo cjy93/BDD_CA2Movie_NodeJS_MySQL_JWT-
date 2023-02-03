@@ -4,6 +4,7 @@ import http from "./http";
 const config = {
     headers: { Authorization: `Bearer ${localStorage["token"]}` }
 };
+// data= body json
 class MovieDataService {
     login(data) {
         return http.post(`/login`, data);
@@ -23,6 +24,10 @@ class MovieDataService {
 
     deleteMovie(index) {
         return http.delete(`movie/${index}`, config).then(console.log).catch(console.log);
+    }
+
+    createUser(data) {
+        return http.post(`/userAdd`, data);
     }
 
 

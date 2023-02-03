@@ -4,8 +4,10 @@ export const userSlice = createSlice({
   name: 'userSlices',
   initialState: {
     value: [{
-      username: "jy",
-      password: "123"
+      username: "jiayi@gmail.com",
+      password: "12345",
+      role: "admin",
+      name: "jiayi"
     }] // All users loaded initially
   },
 
@@ -13,9 +15,11 @@ export const userSlice = createSlice({
     addUser: function (state, action) {
       // To be used in "createAccount.jsx"
       // use `unshift` to push element to front of list
-      state.value.unshift({
-        username: action.payload.username,
-        password: action.payload.password
+      state.value.push({
+        email: action.payload.email,
+        password: action.payload.password,
+        role: action.payload.role,
+        name: action.payload.name
       });
     }
   }

@@ -198,7 +198,9 @@ export default function MovieUpdate(props) {
     },
     placeholder: "required",
     onKeyDown: e => restrictAlphabets(e)
-  })), /*#__PURE__*/React.createElement(Form.Group, {
+  }))), /*#__PURE__*/React.createElement(Row, {
+    className: "mb-3"
+  }, /*#__PURE__*/React.createElement(Form.Group, {
     as: Col
   }, /*#__PURE__*/React.createElement(Form.Label, null, "Genre:"), /*#__PURE__*/React.createElement(Form.Select, {
     type: "Text",

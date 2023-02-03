@@ -4,8 +4,10 @@ export const userfieldSlice = createSlice({
   name: 'userfieldSlices',
   initialState: {
     value: {
-      username: "",
-      password: ""
+      email: "",
+      password: "",
+      role: "",
+      name: ""
     } // input field
   },
 

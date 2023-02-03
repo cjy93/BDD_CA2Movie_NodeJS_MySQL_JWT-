@@ -7,14 +7,17 @@ import { useSelector, useDispatch } from 'react-redux';
 import { addUser } from "./slices/userAccountSlice.js";
 import { userfield } from "./slices/userfieldSlice.js";
 import { Link } from 'react-router-dom';
+import MovieDataService from "../services.js";
 export default function CreateUserAccount(props) {
   const dispatch = useDispatch();
   // Existing username and password fields
   const userFields = useSelector(function (store) {
     return store.userfields.value;
   });
-  let username = userFields.username;
+  let email = userFields.email;
   let password = userFields.password;
+  let role = userFields.role;
+  let name = userFields.name;
   // Boolean operator to check if user is created. true = created
   const [created, setCreated] = React.useState(false);
 
@@ -27,13 +30,15 @@ export default function CreateUserAccount(props) {
     as: Col,
     className: "mb-3",
     controlId: "formAdd"
-  }, /*#__PURE__*/React.createElement(Form.Label, null, "Username:"), /*#__PURE__*/React.createElement(Form.Control, {
+  }, /*#__PURE__*/React.createElement(Form.Label, null, "Email:"), /*#__PURE__*/React.createElement(Form.Control, {
     type: "Text",
-    value: username,
+    value: email,
     onChange: e => {
       dispatch(userfield({
-        username: e.target.value,
-        password: password
+        email: e.target.value,
+        password: password,
+        role: role,
+        name: name
       }));
     },
     required: true,
@@ -47,23 +52,83 @@ export default function CreateUserAccount(props) {
     defaultValue: password,
     onChange: e => {
       dispatch(userfield({
-        username: username,
-        password: e.target.value
+        email: email,
+        password: e.target.value,
+        role: role,
+        name: name
       }));
     },
     placeholder: "required"
   }))), /*#__PURE__*/React.createElement(Row, {
     className: "mb-3"
+  }, /*#__PURE__*/React.createElement(Form.Group, {
+    as: Col,
+    className: "mb-3",
+    controlId: "formAdd"
+  }, /*#__PURE__*/React.createElement(Form.Label, null, "Role:"), /*#__PURE__*/React.createElement(Form.Control, {
+    type: "Text",
+    value: role,
+    onChange: e => {
+      dispatch(userfield({
+        email: email,
+        password: password,
+        role: e.target.value,
+        name: name
+      }));
+    },
+    required: true,
+    placeholder: "required"
+  })), /*#__PURE__*/React.createElement(Row, {
+    className: "mb-3"
+  })), /*#__PURE__*/React.createElement(Row, {
+    className: "mb-3"
+  }, /*#__PURE__*/React.createElement(Form.Group, {
+    as: Col,
+    className: "mb-3",
+    controlId: "formAdd"
+  }, /*#__PURE__*/React.createElement(Form.Label, null, "Name:"), /*#__PURE__*/React.createElement(Form.Control, {
+    type: "Text",
+    value: name,
+    onChange: e => {
+      dispatch(userfield({
+        email: email,
+        password: password,
+        role: role,
+        name: e.target.value
+      }));
+    },
+    required: true,
+    placeholder: "required"
+  })), /*#__PURE__*/React.createElement(Row, {
+    className: "mb-3"
+  })), /*#__PURE__*/React.createElement(Row, {
+    className: "mb-3"
   }, !created && /*#__PURE__*/React.createElement(Form.Group, null, /*#__PURE__*/React.createElement(Button, {
     variant: "primary",
     onClick: () => {
+      // To update Redux frontend
       dispatch(addUser({
-        username: username,
-        password: password
+        email: email,
+        password: password,
+        role: role,
+        name: name
       }));
       // If user is created, change to true
       setCreated(true);
-      // Checks if user is created. If created, display this below
+      // To update SQL database backend
+      let bodyData = {
+        email: email,
+        password: password,
+        role: role,
+        name: name
+      };
+      console.log("what is in bodyData", bodyData);
+      MovieDataService.createUser(bodyData).then(response => {
+        if (response.data) {
+          console.log("what is the response");
+          console.log(response);
+        }
+      });
     }
   }, "Create New Account"))), created && /*#__PURE__*/React.createElement(Row, {
     className: "mb-3"
