@@ -6,7 +6,8 @@ import { Button, Row, Col, Card, Form, Container } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { login } from "./slices/pageSlice.js";
 import { Link } from 'react-router-dom';
-import { userfield } from "./slices/userfieldSlice.js"; // functional component name is capitalised
+import { userfield } from "./slices/userfieldSlice.js";
+import MovieDataService from "../services.js"; // functional component name is capitalised
 export default function Login(props) {
   const dispatch = useDispatch();
   const [isPassword, setIsPassword] = React.useState(true); //show or hide password
@@ -27,8 +28,8 @@ export default function Login(props) {
   let username = userFields.username;
   let password = userFields.password;
   let successMsg = "Success";
-  let invalidMsg = "Either invalid username or incorrect password! Try username: jy, password: 123 ";
-  let emptyMsg = "Both username and password cannot be empty!";
+  let invalidMsg = "Either invalid account or not an ADMIN! Try admin account email: jiayi@gmail.com, password: 12345 ";
+  let emptyMsg = "Both email and password cannot be empty!";
 
   // Username
   let usernameEle =
@@ -36,7 +37,7 @@ export default function Login(props) {
   // Put "div" so elements can go to next row, not print in one row
   React.createElement(Form.Group, null, /*#__PURE__*/React.createElement(Form.Label, {
     className: "text-dark"
-  }, "Username: "), /*#__PURE__*/React.createElement("input", {
+  }, "Email: "), /*#__PURE__*/React.createElement("input", {
     type: "text",
     value: username,
     onChange: function (event) {
@@ -95,16 +96,23 @@ export default function Login(props) {
         return;
       }
 
-      // There is API, check against the list of created username and password
-      {
-        userList.map(function (user, index) {
-          if (user.username === username && user.password === password) {
-            // alert(successMsg);
-            // came from App.jsx
+      // For Axios and backend
+      const userData = {
+        email: username,
+        password: password
+      };
+      // return login promise
+      MovieDataService.login(userData).then(response => {
+        if (response.data) {
+          console.log("what is the response");
+          console.log(response);
+          if (response.status == 200) {
             dispatch(login(logout));
+          } else {
+            alert(invalidMsg);
           }
-        });
-      }
+        }
+      });
 
       // fetch backend if you have api
       // fetch("api url")
@@ -134,8 +142,10 @@ export default function Login(props) {
   }, /*#__PURE__*/React.createElement("h2", {
     className: "fw-bold mb-2 text-uppercase text-dark"
   }, /*#__PURE__*/React.createElement("b", null, "Welcome to Labamba!", /*#__PURE__*/React.createElement("img", {
-    src: "src\\Assignment_CA1_P7337992\\Other_codes_CA1\\data\\logo.ico"
-  }))), /*#__PURE__*/React.createElement("p", {
+    src: "src\\data\\logo.ico"
+  }))), /*#__PURE__*/React.createElement("h3", {
+    className: "fw-bold mb-2 text-uppercase text-dark"
+  }, "This is admin only account"), /*#__PURE__*/React.createElement("p", {
     className: "text-dark mb-5"
   }, "Please enter your login and password!"), /*#__PURE__*/React.createElement("div", {
     className: "mb-3"

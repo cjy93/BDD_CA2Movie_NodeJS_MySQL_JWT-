@@ -16,7 +16,7 @@ export default function RootPage(props) {
   }, /*#__PURE__*/React.createElement(Link, {
     to: '/'
   }, /*#__PURE__*/React.createElement("img", {
-    src: "src\\Assignment_CA1_P7337992\\Other_codes_CA1\\data\\logo.ico",
+    src: "src\\data\\logo.ico",
     style: {
       width: "20%",
       height: "20%"

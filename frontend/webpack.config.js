@@ -4,9 +4,7 @@
 const { ProvidePlugin } = require('webpack'); // Remember to import
 module.exports = {
     entry: {
-        App_ca1: './output/App_Assignment1_P7337992.js',
-        App_ca2: './output/App_Assignment2_P7337992.js',
-        App: './output/App.js'
+        App_ca2: './output/App_Assignment2_P7337992.js'
     },
     output: {
         // default output to ./dist folder

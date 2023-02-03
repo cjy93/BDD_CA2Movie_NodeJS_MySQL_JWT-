@@ -15,7 +15,7 @@ export default function RootPage(props) {
         <div>
             <Navbar bg="dark" variant="dark">
                 <Container>
-                    <Navbar.Brand href="/"><Link to={'/'} ><img src="src\Assignment_CA1_P7337992\Other_codes_CA1\data\logo.ico" style={{ width: "20%", height: "20%" }} /></Link></Navbar.Brand>
+                    <Navbar.Brand href="/"><Link to={'/'} ><img src="src\data\logo.ico" style={{ width: "20%", height: "20%" }} /></Link></Navbar.Brand>
                     <div>
                         <ul >
                             {/*our links will go here */}

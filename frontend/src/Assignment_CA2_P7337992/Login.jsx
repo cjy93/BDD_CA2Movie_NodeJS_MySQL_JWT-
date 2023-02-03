@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { login } from './slices/pageSlice';
 import { Link } from 'react-router-dom';
 import { userfield } from './slices/userfieldSlice';
+import MovieDataService from "../services";
 
 // functional component name is capitalised
 export default function Login(props) {
@@ -31,14 +32,14 @@ export default function Login(props) {
 
 
     let successMsg = "Success";
-    let invalidMsg = "Either invalid username or incorrect password! Try username: jy, password: 123 "
-    let emptyMsg = "Both username and password cannot be empty!"
+    let invalidMsg = "Either invalid account or not an ADMIN! Try admin account email: jiayi@gmail.com, password: 12345 "
+    let emptyMsg = "Both email and password cannot be empty!"
 
     // Username
     let usernameEle = (
         // Put "div" so elements can go to next row, not print in one row
         <Form.Group>
-            <Form.Label className="text-dark">Username: </Form.Label>
+            <Form.Label className="text-dark">Email: </Form.Label>
             {/* Dont have username due to no initial value */}
             {/* can omit value={username} if you want to, unless got initial userName*/}
             <input type="text" value={username} onChange={function (event) {
@@ -89,16 +90,23 @@ export default function Login(props) {
                                 return;
                             }
 
-                            // There is API, check against the list of created username and password
-                            {
-                                userList.map(function (user, index) {
-                                    if (user.username === username && user.password === password) {
-                                        // alert(successMsg);
-                                        // came from App.jsx
-                                        dispatch(login(logout));
-                                    }
-                                })
+                            // For Axios and backend
+                            const userData = {
+                                email: username,
+                                password: password
                             }
+                            // return login promise
+                            MovieDataService.login(userData).then(response => {
+                                if (response.data) {
+                                    console.log("what is the response")
+                                    console.log(response);
+                                    if (response.status == 200) {
+                                        dispatch(login(logout));
+                                    } else {
+                                        alert(invalidMsg);
+                                    }
+                                }
+                            });
 
                             // fetch backend if you have api
                             // fetch("api url")
@@ -128,7 +136,8 @@ export default function Login(props) {
                         <Card className="shadow">
                             <Card.Body>
                                 <div className="mb-3 mt-md-4">
-                                    <h2 className="fw-bold mb-2 text-uppercase text-dark"><b>Welcome to Labamba!<img src="src\Assignment_CA1_P7337992\Other_codes_CA1\data\logo.ico" /></b></h2>
+                                    <h2 className="fw-bold mb-2 text-uppercase text-dark"><b>Welcome to Labamba!<img src="src\data\logo.ico" /></b></h2>
+                                    <h3 className="fw-bold mb-2 text-uppercase text-dark">This is admin only account</h3>
                                     <p className="text-dark mb-5">Please enter your login and password!</p>
                                     <div className="mb-3">
                                         <Form>
