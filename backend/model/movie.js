@@ -26,6 +26,29 @@ movieDB.getAllMovies = (limit, offset, callback) => {
     })
 }
 
+// Get all movies for the frontend app, output without amalgamation with genre details
+movieDB.getAllMoviesForApp = (limit, offset, callback) => {
+    // 1. Get SQL connection
+    var conn = db.getConnection();
+
+    // 2. Specify the SQL string/statement
+    // var sqlStmt = "SELECT * from bdd_ca1.movie LIMIT ? OFFSET ?";
+    var sqlStmt = "SELECT * FROM bdd_ca1.movie ORDER BY movieID ASC LIMIT ? OFFSET ?";
+
+    // 3. Execute query-connection
+    conn.query(sqlStmt, [limit, offset], (err, result) => {
+        //4. End connection
+        conn.end();
+
+        // 5. React to error or result state/object
+        if (err) {
+            return callback(err, null);
+        } else {
+            return callback(null, result);
+        }
+    })
+}
+
 // Get all ACTIVE movies
 movieDB.getActiveMovies = (limit, offset, callback) => {
     // 1. Get SQL connection

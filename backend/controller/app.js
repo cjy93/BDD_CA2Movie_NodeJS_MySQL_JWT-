@@ -75,6 +75,30 @@ app.get("/movie", (req, res) => {
     })
 })
 
+// get all movies, only for the frontend app, without amalgamation with genre details
+app.get("/movieforApp", (req, res) => {
+    // GET /movie?limit=###&offset=###
+    var limit = 200;
+    var offset = 0;
+    if (req.query.limit != undefined) {
+        limit = parseInt(req.query.limit);
+    }
+    if (req.query.offset != undefined) {
+        offset = parseInt(req.query.offset);
+    }
+
+    movieDB.getAllMoviesForApp(limit, offset, (err, result) => {
+        if (err) {
+            console.log(err);
+            res.status(500);
+            res.send({ message: "Internal Server Error" });
+        } else {
+            res.status(200);
+            res.send(result);
+        }
+    })
+})
+
 // Get all Active movies
 app.get("/movie/active", (req, res) => {
     // GET /movie/Active?limit=###&offset=###

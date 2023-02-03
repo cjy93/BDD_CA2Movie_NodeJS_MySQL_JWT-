@@ -14,7 +14,7 @@ class MovieDataService {
     }
 
     allMovies() {
-        return http.get(`/movie`);
+        return http.get(`/movieforApp`);
     }
 
     // updateMovies(data, index) {

@@ -13,7 +13,7 @@ class MovieDataService {
     return http.post(`/movie`, data, config).then(console.log).catch(console.log);
   }
   allMovies() {
-    return http.get(`/movie`);
+    return http.get(`/movieforApp`);
   }
 
   // updateMovies(data, index) {
