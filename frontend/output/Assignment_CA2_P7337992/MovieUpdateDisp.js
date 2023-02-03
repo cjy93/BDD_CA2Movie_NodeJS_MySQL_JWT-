@@ -21,27 +21,29 @@ export default function MoviePinDisp(props) {
       }
     }, /*#__PURE__*/React.createElement(Card.Img, {
       variant: "top",
-      src: movie.small_posters
+      src: movie.Image_URL
     }), /*#__PURE__*/React.createElement(Card.Body, null, /*#__PURE__*/React.createElement(Card.Title, {
       className: "text-dark"
     }, /*#__PURE__*/React.createElement("a", {
       href: movie.links,
       target: "_blank"
-    }, movie.movie)), /*#__PURE__*/React.createElement(Card.Text, {
+    }, movie.name)), /*#__PURE__*/React.createElement(Card.Text, {
       className: "text-dark"
-    }, "[Date Released: ", movie.release_date, "] (", emoji, movie.imdb, "%)", /*#__PURE__*/React.createElement("button", {
+    }, "[Date Released: ", movie.Release_Date, "] (", emoji, movie.imdb, "%)", /*#__PURE__*/React.createElement("button", {
       onClick: () => {
         // Populate the input boxes once any movie is selected. 
-        localStorage["movieUpdateId"] = movie['id'];
+        localStorage["movieUpdateId"] = movie['movieID'];
         // populate the fields
         dispatch(updatefield({
           id: parseInt(localStorage["movieUpdateId"]),
-          title: movie.movie,
+          title: movie.name,
+          description: movie.description,
           rating: movie.imdb,
-          genres: movie.genres,
-          poster: movie.small_posters,
+          genres: movie.GenreFull,
+          poster: movie.Image_URL,
           url: movie.links,
-          release: movie.release_date,
+          release: movie.Release_Date,
+          active: movie.Active,
           year: movie.year,
           runtime: movie.runtime,
           actor1: movie.actor1,
@@ -60,7 +62,7 @@ export default function MoviePinDisp(props) {
       to: `/details/${movie['id']}`
     }, /*#__PURE__*/React.createElement("button", {
       onClick: () => {
-        localStorage['movieId'] = movie['id'];
+        localStorage['movieId'] = movie['movieID'];
       }
     }, "Details page! \uD83D\uDCD4")))))));
   }));

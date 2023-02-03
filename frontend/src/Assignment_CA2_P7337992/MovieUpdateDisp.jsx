@@ -26,23 +26,23 @@ export default function MoviePinDisp(props) {
                         {/* Write details in each card */}
                         <Col md="3">
                             <Card style={{ width: '14rem' }}>
-                                <Card.Img variant="top" src={movie.small_posters} />
+                                <Card.Img variant="top" src={movie.Image_URL} />
                                 <Card.Body>
-                                    <Card.Title className="text-dark">{<a href={movie.links} target="_blank">{movie.movie}</a>}</Card.Title>
+                                    <Card.Title className="text-dark">{<a href={movie.links} target="_blank">{movie.name}</a>}</Card.Title>
                                     <Card.Text className="text-dark">
-                                        [Date Released: {movie.release_date}] ({emoji}
+                                        [Date Released: {movie.Release_Date}] ({emoji}
                                         {movie.imdb}%)
 
                                         <button
                                             onClick={() => {
                                                 // Populate the input boxes once any movie is selected. 
-                                                localStorage["movieUpdateId"] = movie['id'];
+                                                localStorage["movieUpdateId"] = movie['movieID'];
                                                 // populate the fields
-                                                dispatch(updatefield({ id: parseInt(localStorage["movieUpdateId"]), title: movie.movie, rating: movie.imdb, genres: movie.genres, poster: movie.small_posters, url: movie.links, release: movie.release_date, year: movie.year, runtime: movie.runtime, actor1: movie.actor1, actor2: movie.actor2, actor3: movie.actor3, actor4: movie.actor4, actor1_pic: movie.actor1_pic, actor2_pic: movie.actor2_pic, actor3_pic: movie.actor3_pic, actor4_pic: movie.actor4_pic, youtube: movie.youtube, storyPlot: movie.storyPlot }))
+                                                dispatch(updatefield({ id: parseInt(localStorage["movieUpdateId"]), title: movie.name, description: movie.description, rating: movie.imdb, genres: movie.GenreFull, poster: movie.Image_URL, url: movie.links, release: movie.Release_Date, active: movie.Active, year: movie.year, runtime: movie.runtime, actor1: movie.actor1, actor2: movie.actor2, actor3: movie.actor3, actor4: movie.actor4, actor1_pic: movie.actor1_pic, actor2_pic: movie.actor2_pic, actor3_pic: movie.actor3_pic, actor4_pic: movie.actor4_pic, youtube: movie.youtube, storyPlot: movie.storyPlot }))
                                             }}>Select movie for update</button>
                                         {/* Link to Details page from selected movie */}
                                         <Link to={`/details/${movie['id']}`}><button onClick={() => {
-                                            localStorage['movieId'] = movie['id'];
+                                            localStorage['movieId'] = movie['movieID'];
                                         }}>Details page! 📔</button></Link>
                                     </Card.Text>
 

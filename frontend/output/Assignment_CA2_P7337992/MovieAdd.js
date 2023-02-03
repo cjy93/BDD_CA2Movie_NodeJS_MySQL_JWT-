@@ -149,14 +149,13 @@ export default function MovieAdd(props) {
     as: Col
   }, /*#__PURE__*/React.createElement(Form.Label, null, "Genres:"), /*#__PURE__*/React.createElement(Form.Select, {
     type: "Text",
-    value: genreName,
+    value: genreNameMap[genreId],
     onChange: e => {
-      setGenreName(e.target.value);
       dispatch(addfields({
         title: title,
         description: description,
         rating: rating,
-        genreId: genreNameMap[genreName],
+        genreId: genreNameMap[e.target.value],
         poster: poster,
         url: url,
         release: release,
@@ -268,7 +267,6 @@ export default function MovieAdd(props) {
 
       // Update Database backend
       const bodyData = {
-        movieID: newId,
         name: title,
         description: description,
         imdb: rating,
@@ -279,6 +277,7 @@ export default function MovieAdd(props) {
         Active: active,
         GenreFull: genreidMap[genreId]
       };
+      console.log("what are the added", bodyData);
       MovieDataService.createMovie(bodyData).then(response => {
         if (response.data) {
           console.log("what is the response");

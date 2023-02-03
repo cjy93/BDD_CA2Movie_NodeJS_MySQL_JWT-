@@ -15,8 +15,8 @@ class MovieDataService {
   allMovies() {
     return http.get(`/movieforApp`);
   }
-  updateMovies(data, config) {
-    return http.put(`movie/${data[index]}`, data);
+  updateMovie(data, index) {
+    return http.put(`movie/${index}`, data, config).then(console.log).catch(console.log);
   }
   deleteMovie(index) {
     return http.delete(`movie/${index}`, config).then(console.log).catch(console.log);

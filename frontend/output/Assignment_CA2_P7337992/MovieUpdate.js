@@ -18,19 +18,53 @@ export default function MovieUpdate(props) {
   const logout = useSelector(function (store) {
     return store.page.value;
   });
+  var genreidMap = {
+    1: "Action",
+    2: "Adventure",
+    3: "Animation",
+    4: "Comedy",
+    5: "Crime",
+    6: "Documentary",
+    7: "Drama",
+    8: "Fantasy",
+    9: "Horror",
+    10: "Mystery",
+    11: "Romance",
+    12: "Sci-Fi",
+    13: "Sport"
+  };
+  var genreNameMap = {
+    "Action": 1,
+    "Adventure": 2,
+    "Animation": 3,
+    "Comedy": 4,
+    "Crime": 5,
+    "Documentary": 6,
+    "Drama": 7,
+    "Fantasy": 8,
+    "Horror": 9,
+    "Mystery": 10,
+    "Romance": 11,
+    "Sci-Fi": 12,
+    "Sport": 13
+  };
+  const keysGenre = Object.keys(genreNameMap);
+
   // Existing parameters for the input boxes
   const updateField = useSelector(function (store) {
     return store.updatefield.value;
   });
   let id = updateField.id;
+  let description = updateField.description;
   let title = updateField.title;
   let rating = updateField.rating;
-  let genres = updateField.genres;
+  let genreId = updateField.genreId;
   let poster = updateField.poster;
   let url = updateField.url;
   let release = updateField.release;
-  let year = updateField.year;
+  let active = updateField.active;
   // Optional fields
+  let year = updateField.year;
   let runtime = updateField.runtime;
   let storyPlot = updateField.storyPlot;
   let actor1 = updateField.actor1;
@@ -55,12 +89,14 @@ export default function MovieUpdate(props) {
   // Write object(once) to add to dispatch. We "spread" this object when we need to update the key value pair, for simpler writing in the input fields below.
   var fields = {
     id: id,
+    description: description,
     title: title,
     rating: rating,
-    genres: genres,
+    genreId: genreId,
     poster: poster,
     url: url,
     release: release,
+    active: active,
     runtime: runtime,
     year: year,
     storyPlot: storyPlot,
@@ -130,6 +166,25 @@ export default function MovieUpdate(props) {
     required: true,
     placeholder: "required"
   })), /*#__PURE__*/React.createElement(Form.Group, {
+    as: Col,
+    className: "mb-3",
+    controlId: "formAdd"
+  }, /*#__PURE__*/React.createElement(Form.Label, null, "Description:"), /*#__PURE__*/React.createElement(Form.Control, {
+    type: "Text",
+    value: description,
+    onChange: e => {
+      dispatch(updatefield({
+        ...fields,
+        description: e.target.value
+      }));
+      console.log(dispatch(updatefield({
+        ...fields,
+        description: e.target.value
+      })));
+    },
+    required: true,
+    placeholder: "required"
+  })), /*#__PURE__*/React.createElement(Form.Group, {
     as: Col
   }, /*#__PURE__*/React.createElement(Form.Label, null, "Rating:"), /*#__PURE__*/React.createElement(Form.Control, {
     type: "number" // this alone can also prevent key in non numeric
@@ -145,18 +200,26 @@ export default function MovieUpdate(props) {
     onKeyDown: e => restrictAlphabets(e)
   })), /*#__PURE__*/React.createElement(Form.Group, {
     as: Col
-  }, /*#__PURE__*/React.createElement(Form.Label, null, "Genres:"), /*#__PURE__*/React.createElement(Form.Control, {
+  }, /*#__PURE__*/React.createElement(Form.Label, null, "Genre:"), /*#__PURE__*/React.createElement(Form.Select, {
     type: "Text",
-    value: genres,
+    value: genreNameMap[genreId],
     onChange: e => {
       dispatch(updatefield({
         ...fields,
-        genres: e.target.value
+        genreId: genreNameMap[e.target.value]
       }));
+      console.log("what is the chosen genre id", genreNameMap[genreId]);
+      console.log("what is the chosen genre value", genreNameMap[e.target.value]);
     },
     required: true,
     placeholder: "required"
-  })), /*#__PURE__*/React.createElement(Form.Group, {
+  }, /*#__PURE__*/React.createElement("option", {
+    value: "Choose"
+  }, "Choose"), keysGenre.map(function (object, i) {
+    return /*#__PURE__*/React.createElement("option", {
+      value: object
+    }, " ", object);
+  }))), /*#__PURE__*/React.createElement(Form.Group, {
     as: Col
   }, /*#__PURE__*/React.createElement(Form.Label, null, "Poster URL:"), /*#__PURE__*/React.createElement(Form.Control, {
     type: "Text",
@@ -187,13 +250,30 @@ export default function MovieUpdate(props) {
         release: e.target.value
       }));
     },
-    placeholder: "MMM DD, YYYY"
-  })), /*#__PURE__*/React.createElement(Form.Group, null, /*#__PURE__*/React.createElement(Button, {
+    placeholder: "YYYY-MM-DD"
+  })), /*#__PURE__*/React.createElement(Form.Group, {
+    as: Col
+  }, /*#__PURE__*/React.createElement(Form.Label, null, "Active:"), /*#__PURE__*/React.createElement(Form.Select, {
+    value: active,
+    onChange: e => {
+      dispatch(updatefield({
+        ...fields,
+        active: e.target.value
+      }));
+    },
+    placeholder: "Choose"
+  }, /*#__PURE__*/React.createElement("option", {
+    value: "Choose"
+  }, "Choose"), /*#__PURE__*/React.createElement("option", {
+    value: "N"
+  }, "N"), /*#__PURE__*/React.createElement("option", {
+    value: "Y"
+  }, "Y"))), /*#__PURE__*/React.createElement(Form.Group, null, /*#__PURE__*/React.createElement(Button, {
     variant: "primary",
     onClick: () => {
       // Update Database backend
       const bodyData = {
-        movieID: newId,
+        movieID: id,
         name: title,
         description: description,
         imdb: rating,
@@ -202,13 +282,24 @@ export default function MovieUpdate(props) {
         links: url,
         Release_Date: release,
         Active: active,
-        GenreFull: genreidMap[genreId]
-      };
-      MovieDataService.createMovie(bodyData).then(response => {
-        if (response.data) {
-          console.log("what is the response");
-          console.log(response);
-        }
+        GenreFull: genreidMap[genreId],
+        year: year,
+        runtime: runtime,
+        actor1: actor1,
+        actor2: actor2,
+        actor3: actor3,
+        actor4: actor4,
+        actor1_pic: actor1_pic,
+        actor2_pic: actor2_pic,
+        actor3_pic: actor3_pic,
+        actor4_pic: actor4_pic,
+        youtube: youtube,
+        storyPlot: storyPlot
+      }; // "index" for is req.params
+      console.log("what is put to updatemovie?", bodyData);
+      MovieDataService.updateMovie(bodyData, id).then(response => {
+        console.log("what is the response");
+        console.log(response);
       });
       // Update Redux list
       dispatch(update(updateField));
@@ -351,7 +442,39 @@ export default function MovieUpdate(props) {
     }
   })), /*#__PURE__*/React.createElement(Form.Group, null, /*#__PURE__*/React.createElement(Button, {
     variant: "primary",
-    onClick: () => {
+    onClick: e => {
+      // Update Database backend
+      const bodyData = {
+        movieID: id,
+        name: title,
+        description: description,
+        imdb: rating,
+        GenreId: genreId,
+        Image_URL: poster,
+        links: url,
+        Release_Date: release,
+        Active: active,
+        GenreFull: genreidMap[genreId],
+        year: year,
+        runtime: runtime,
+        actor1: actor1,
+        actor2: actor2,
+        actor3: actor3,
+        actor4: actor4,
+        actor1_pic: actor1_pic,
+        actor2_pic: actor2_pic,
+        actor3_pic: actor3_pic,
+        actor4_pic: actor4_pic,
+        youtube: youtube,
+        storyPlot: storyPlot
+      };
+      // second param for is req.params
+      MovieDataService.updateMovie(bodyData, id).then(response => {
+        if (response.data) {
+          console.log("what is the response");
+          console.log(response);
+        }
+      });
       // Update "update" for Redux
       dispatch(update(updateField));
       // Update "update" for database

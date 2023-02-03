@@ -7,12 +7,14 @@ export const updatefieldSlice = createSlice({
       // Main Menu for inputs
       // Variable names follow what will be displayed at frontend
       id: "",
+      description: "",
       title: "",
       rating: "",
-      genres: "",
+      genreId: "",
       poster: "",
       url: "",
       release: "",
+      active: "",
       // The optionals (dropdown menu for updates)
       runtime: "",
       storyplot: "",

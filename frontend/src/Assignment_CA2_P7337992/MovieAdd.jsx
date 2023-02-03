@@ -103,10 +103,9 @@ export default function MovieAdd(props) {
                         <Form.Label>Genres:</Form.Label>
                         <Form.Select
                             type="Text"
-                            value={genreName}
+                            value={genreNameMap[genreId]}
                             onChange={(e) => {
-                                setGenreName(e.target.value);
-                                dispatch(addfields({ title: title, description: description, rating: rating, genreId: genreNameMap[genreName], poster: poster, url: url, release: release, active: active }))
+                                dispatch(addfields({ title: title, description: description, rating: rating, genreId: genreNameMap[e.target.value], poster: poster, url: url, release: release, active: active }))
                             }}
                             required
                             placeholder="required"
@@ -171,7 +170,9 @@ export default function MovieAdd(props) {
                                 dispatch(add({ newId: newId, title: title, rating: rating, genreId: genreId, poster: poster, url: url, release: release }));
 
                                 // Update Database backend
-                                const bodyData = { movieID: newId, name: title, description: description, imdb: rating, GenreId: genreId, Image_URL: poster, links: url, Release_Date: release, Active: active, GenreFull: genreidMap[genreId] }
+                                const bodyData = { name: title, description: description, imdb: rating, GenreId: genreId, Image_URL: poster, links: url, Release_Date: release, Active: active, GenreFull: genreidMap[genreId] };
+
+                                console.log("what are the added", bodyData);
 
                                 MovieDataService.createMovie(bodyData).then(response => {
                                     if (response.data) {
