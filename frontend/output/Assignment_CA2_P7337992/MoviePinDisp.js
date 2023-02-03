@@ -13,7 +13,7 @@ export default function MoviePinDisp(props) {
   // list of all current movies
   let movies = props.movies;
   // Pinned movies list
-  let pinnedMovies = movies.filter(movie => pinned.includes(parseInt(movie.id)));
+  let pinnedMovies = movies.filter(movie => pinned.includes(parseInt(movie.movieID)));
   return /*#__PURE__*/React.createElement(React.Fragment, null, pinnedMovies.map(function (movie, index) {
     const emoji = movie.imdb >= 5 ? '👍' : movie.imdb < 5 ? '👎' : '❓';
     return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Col, {
@@ -24,20 +24,20 @@ export default function MoviePinDisp(props) {
       }
     }, /*#__PURE__*/React.createElement(Card.Img, {
       variant: "top",
-      src: movie.small_posters
+      src: movie.Image_URL
     }), /*#__PURE__*/React.createElement(Card.Body, null, /*#__PURE__*/React.createElement(Card.Title, {
       className: "text-dark"
     }, /*#__PURE__*/React.createElement("a", {
       href: movie.links,
       target: "_blank"
-    }, movie.movie)), /*#__PURE__*/React.createElement(Card.Text, {
+    }, movie.name)), /*#__PURE__*/React.createElement(Card.Text, {
       className: "text-dark"
-    }, "[Date Released: ", movie.release_date, "] (", emoji, movie.imdb, "%)", /*#__PURE__*/React.createElement("button", {
-      className: !pinned.includes(parseInt(movie.id)) ? 'hide' : '' // hide pin button if it is pinned
+    }, "[Date Released: ", movie.Release_Date, "] (", emoji, movie.imdb, "%)", /*#__PURE__*/React.createElement("button", {
+      className: !pinned.includes(parseInt(movie.movieID)) ? 'hide' : '' // hide pin button if it is pinned
       ,
       onClick: () => {
         dispatch(unpin(movie));
-        console.log(movie.id);
+        console.log(movie.movieID);
       }
     }, "Unpin \uD83D\uDCCC"))))));
   }));

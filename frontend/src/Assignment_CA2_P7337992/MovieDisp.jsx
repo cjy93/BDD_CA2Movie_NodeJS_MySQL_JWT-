@@ -46,13 +46,13 @@ export default function MovieDisp(props) {
                                         {/* Delete each individual movie with button */}
                                         <button variant="primary"
                                             onClick={(e) => {
-                                                props.onDelete(index);
                                                 MovieDataService.deleteMovie(movie.movieID).then(response => {
                                                     if (response.data) {
                                                         console.log("what is the delete response")
                                                         console.log(response);
                                                     }
                                                 });
+                                                props.onDelete(index);
                                             }}>
                                             Delete 🗑️
                                         </button>

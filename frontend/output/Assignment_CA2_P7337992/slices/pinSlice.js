@@ -8,14 +8,14 @@ export const pinSlice = createSlice({
 
   reducers: {
     pin: function (state, action) {
-      let pinId = action.payload.id;
+      let pinId = action.payload.movieID;
       // Only add to "pinned" list if not already in list. Max pin up to 5 movies
       if (!state.value.includes(parseInt(pinId)) && state.value.length <= 4) {
-        state.value.unshift(parseInt(action.payload.id));
+        state.value.unshift(parseInt(action.payload.movieID));
       }
     },
     unpin: function (state, action) {
-      let pinId = action.payload.id;
+      let pinId = action.payload.movieID;
       // Only add to "pinned" list if not already in list
       if (state.value.includes(parseInt(pinId))) {
         state.value = state.value.filter(e => e != pinId);

@@ -15,7 +15,7 @@ export default function MoviePinDisp(props) {
     // list of all current movies
     let movies = props.movies
     // Pinned movies list
-    let pinnedMovies = movies.filter(movie => pinned.includes(parseInt(movie.id)))
+    let pinnedMovies = movies.filter(movie => pinned.includes(parseInt(movie.movieID)))
 
     return (
         <>
@@ -28,18 +28,18 @@ export default function MoviePinDisp(props) {
                         {/* Write details in each card */}
                         <Col md="3">
                             <Card style={{ width: '14rem' }}>
-                                <Card.Img variant="top" src={movie.small_posters} />
+                                <Card.Img variant="top" src={movie.Image_URL} />
                                 <Card.Body>
-                                    <Card.Title className="text-dark">{<a href={movie.links} target="_blank">{movie.movie}</a>}</Card.Title>
+                                    <Card.Title className="text-dark">{<a href={movie.links} target="_blank">{movie.name}</a>}</Card.Title>
                                     <Card.Text className="text-dark">
-                                        [Date Released: {movie.release_date}] ({emoji}
+                                        [Date Released: {movie.Release_Date}] ({emoji}
                                         {movie.imdb}%)
 
                                         <button
-                                            className={!pinned.includes(parseInt(movie.id)) ? 'hide' : ''} // hide pin button if it is pinned
+                                            className={!pinned.includes(parseInt(movie.movieID)) ? 'hide' : ''} // hide pin button if it is pinned
                                             onClick={() => {
                                                 dispatch(unpin(movie));
-                                                console.log(movie.id)
+                                                console.log(movie.movieID)
                                             }}>Unpin 📌</button>
                                     </Card.Text>
 

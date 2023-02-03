@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import MovieUpdateDisp from './MovieUpdateDisp';
 import { updatefield } from './slices/updatefieldSlice';
 import { update } from './slices/movieSlice';
+import MovieDataService from "../services";
 
 export default function MovieUpdate(props) {
     const dispatch = useDispatch();
@@ -146,12 +147,17 @@ export default function MovieUpdate(props) {
                                 <Form.Group>
                                     <Button variant="primary"
                                         onClick={() => {
-                                            // setTitle(''); setRating(''); setGenres(''); setPoster(''); setUrl(''); setRelease('');
 
-                                            // props.onAdd([{
-                                            //     id: nextId++, movie: title, imdb: rating, genres: genres,
-                                            //     small_posters: poster, links: url, release_date: release
-                                            // }, ...movies])
+                                            // Update Database backend
+                                            const bodyData = { movieID: newId, name: title, description: description, imdb: rating, GenreId: genreId, Image_URL: poster, links: url, Release_Date: release, Active: active, GenreFull: genreidMap[genreId] }
+
+                                            MovieDataService.createMovie(bodyData).then(response => {
+                                                if (response.data) {
+                                                    console.log("what is the response")
+                                                    console.log(response);
+                                                }
+                                            });
+                                            // Update Redux list
                                             dispatch(update(updateField));
                                         }}>Update</Button>
 
@@ -261,13 +267,9 @@ export default function MovieUpdate(props) {
                                             <Form.Group>
                                                 <Button variant="primary"
                                                     onClick={() => {
-                                                        // setTitle(''); setRating(''); setGenres(''); setPoster(''); setUrl(''); setRelease('');
-
-                                                        // props.onAdd([{
-                                                        //     id: nextId++, movie: title, imdb: rating, genres: genres,
-                                                        //     small_posters: poster, links: url, release_date: release
-                                                        // }, ...movies])
+                                                        // Update "update" for Redux
                                                         dispatch(update(updateField));
+                                                        // Update "update" for database
                                                     }}>Update</Button>
 
                                             </Form.Group>

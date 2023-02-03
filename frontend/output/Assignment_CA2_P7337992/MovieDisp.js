@@ -46,13 +46,13 @@ export default function MovieDisp(props) {
     }, "Pin \uD83D\uDCCC"), /*#__PURE__*/React.createElement("button", {
       variant: "primary",
       onClick: e => {
-        props.onDelete(index);
         MovieDataService.deleteMovie(movie.movieID).then(response => {
           if (response.data) {
             console.log("what is the delete response");
             console.log(response);
           }
         });
+        props.onDelete(index);
       }
     }, "Delete \uD83D\uDDD1\uFE0F")), /*#__PURE__*/React.createElement(BoxClicked, {
       className: "text-dark",

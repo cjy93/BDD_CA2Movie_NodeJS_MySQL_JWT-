@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import MovieUpdateDisp from "./MovieUpdateDisp.js";
 import { updatefield } from "./slices/updatefieldSlice.js";
 import { update } from "./slices/movieSlice.js";
+import MovieDataService from "../services.js";
 export default function MovieUpdate(props) {
   const dispatch = useDispatch();
   // Add the movies from final list
@@ -190,12 +191,26 @@ export default function MovieUpdate(props) {
   })), /*#__PURE__*/React.createElement(Form.Group, null, /*#__PURE__*/React.createElement(Button, {
     variant: "primary",
     onClick: () => {
-      // setTitle(''); setRating(''); setGenres(''); setPoster(''); setUrl(''); setRelease('');
-
-      // props.onAdd([{
-      //     id: nextId++, movie: title, imdb: rating, genres: genres,
-      //     small_posters: poster, links: url, release_date: release
-      // }, ...movies])
+      // Update Database backend
+      const bodyData = {
+        movieID: newId,
+        name: title,
+        description: description,
+        imdb: rating,
+        GenreId: genreId,
+        Image_URL: poster,
+        links: url,
+        Release_Date: release,
+        Active: active,
+        GenreFull: genreidMap[genreId]
+      };
+      MovieDataService.createMovie(bodyData).then(response => {
+        if (response.data) {
+          console.log("what is the response");
+          console.log(response);
+        }
+      });
+      // Update Redux list
       dispatch(update(updateField));
     }
   }, "Update")))), /*#__PURE__*/React.createElement(Accordion, {
@@ -337,13 +352,9 @@ export default function MovieUpdate(props) {
   })), /*#__PURE__*/React.createElement(Form.Group, null, /*#__PURE__*/React.createElement(Button, {
     variant: "primary",
     onClick: () => {
-      // setTitle(''); setRating(''); setGenres(''); setPoster(''); setUrl(''); setRelease('');
-
-      // props.onAdd([{
-      //     id: nextId++, movie: title, imdb: rating, genres: genres,
-      //     small_posters: poster, links: url, release_date: release
-      // }, ...movies])
+      // Update "update" for Redux
       dispatch(update(updateField));
+      // Update "update" for database
     }
   }, "Update"))))))), /*#__PURE__*/React.createElement(Row, {
     xs: 1,
