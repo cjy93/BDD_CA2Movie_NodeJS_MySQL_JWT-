@@ -87,9 +87,9 @@ export default function MovieList(props) {
     ,
     onDelete: index => {
       dispatch(deleteOne(index));
-      const popped = dispatch(deleteOne(index));
-      console.log("What is popped in deleteOne");
-      console.log(popped);
+      // const popped = dispatch(deleteOne(index))
+      // console.log("What is popped in deleteOne")
+      // console.log(popped)
     }
   })))));
 }
