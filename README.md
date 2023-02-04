@@ -29,10 +29,10 @@ user: "jiayi123"
 password: "jiayi123^"
 
 # For official report of this assignment
-"/BDD_CA1_ChanJiaYi_P7337992_report.docx"   
+"/bdd_ca1_ChanJiaYi_P7337992_report.docx"   
 
 # For screenshots and demo
-"/BDD_CA1_ChanJiaYi_P7337992_report.docx"   
+"/bdd_ca1_ChanJiaYi_P7337992_report.docx"   
 
 # Official Github repo
 After the official oral presentation, I will make this repo public at:
