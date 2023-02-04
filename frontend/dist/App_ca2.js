@@ -3158,7 +3158,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ \"./node_modules/axios/lib/axios.js\");\n\n// import { accessToken } from './Assignment_CA2_P7337992/Login'\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (axios__WEBPACK_IMPORTED_MODULE_0__[\"default\"].create({\n  baseURL: \"http://localhost:80/\",\n  headers: {\n    \"Content-type\": \"application/json\"\n    // \"Authorization\": `Bearer ${accessToken}`\n  }\n}));\n\n//# sourceURL=webpack:///./output/http.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ \"./node_modules/axios/lib/axios.js\");\n\n// import { accessToken } from './Assignment_CA2_P7337992/Login'\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (axios__WEBPACK_IMPORTED_MODULE_0__[\"default\"].create({\n  // baseURL: \"http://localhost:3000/\",\n  baseURL: \"http://52.86.67.23:3000/\",\n  headers: {\n    \"Content-type\": \"application/json\"\n    // \"Authorization\": `Bearer ${accessToken}`\n  }\n}));\n\n//# sourceURL=webpack:///./output/http.js?");
 
 /***/ }),
 
