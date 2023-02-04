@@ -97,6 +97,9 @@ export default function Login(props) {
       }
 
       // For Axios and backend
+      // wipe out existing token
+      delete localStorage["token"];
+      // Body data
       const userData = {
         email: username,
         password: password
@@ -104,8 +107,6 @@ export default function Login(props) {
       // return login promise
       MovieDataService.login(userData).then(response => {
         if (response.data) {
-          // wipe out existing token
-          delete localStorage["token"];
           console.log("what is the response");
           console.log(response);
           if (response.status == 200) {
