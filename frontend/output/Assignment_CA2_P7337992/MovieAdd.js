@@ -135,7 +135,7 @@ export default function MovieAdd(props) {
       dispatch(addfields({
         title: title,
         description: description,
-        rating: e.target.value,
+        rating: Number(e.target.value),
         genreId: genreId,
         poster: poster,
         url: url,
@@ -192,6 +192,7 @@ export default function MovieAdd(props) {
   })), /*#__PURE__*/React.createElement(Form.Group, {
     as: Col
   }, /*#__PURE__*/React.createElement(Form.Label, null, "Website URL:"), /*#__PURE__*/React.createElement(Form.Control, {
+    type: "Text",
     value: url,
     onChange: e => {
       dispatch(addfields({
@@ -263,14 +264,15 @@ export default function MovieAdd(props) {
         genreId: genreId,
         poster: poster,
         url: url,
-        release: release
+        release: release,
+        description: description
       }));
 
       // Update Database backend
       const bodyData = {
         name: title,
         description: description,
-        imdb: rating,
+        imdb: Number(rating),
         GenreId: genreId,
         Image_URL: poster,
         links: url,

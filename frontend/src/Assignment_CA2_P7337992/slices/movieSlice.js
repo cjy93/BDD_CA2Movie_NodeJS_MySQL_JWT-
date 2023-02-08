@@ -23,7 +23,7 @@ export const movieSlice = createSlice({
             state.value.push(
                 {
                     movieID: action.payload.id, name: action.payload.title, imdb: action.payload.rating, GenreId: action.payload.genreId,
-                    Image_URL: action.payload.poster, links: action.payload.url, Release_Date: action.payload.release
+                    Image_URL: action.payload.poster, links: action.payload.url, Release_Date: action.payload.release, description: action.payload.description
                 });
         },
         deleteOne: function (state, action) {

@@ -144,10 +144,10 @@ movieDB.createMovie = (movieDetails, callback) => {
 
     console.log(movieDetails);
     //2 - Specify SQL string/statement
-    var sqlStmt = "INSERT INTO bdd_ca1.movie (`name`, `description`,`Release_Date`, `Image_URL`, `GenreId`, `Active`) VALUES (?,?,?,?,?,?);";
+    var sqlStmt = "INSERT INTO bdd_ca1.movie (`name`, `description`,`Release_Date`, `Image_URL`, `GenreId`, `Active`, `imdb`,`links`) VALUES (?,?,?,?,?,?,?,?);";
 
     //3 - Execute query-connection
-    conn.query(sqlStmt, [movieDetails.name, movieDetails.description, movieDetails.Release_Date, movieDetails.Image_URL, movieDetails.GenreId, movieDetails.Active], (err, result) => {
+    conn.query(sqlStmt, [movieDetails.name, movieDetails.description, movieDetails.Release_Date, movieDetails.Image_URL, movieDetails.GenreId, movieDetails.Active, movieDetails.imdb, movieDetails.links], (err, result) => {
         //4 - End connection
         conn.end();
 
@@ -168,22 +168,25 @@ movieDB.updateMovie = (movieDetails, movie_id, callback) => {
     var conn = db.getConnection();
 
     //2 - Specify SQL string/statement (Multiple statements)
-    var sqlStmt = "insert into bdd_ca1.log_updatemovies SELECT * from bdd_ca1.movie m WHERE m.movieID=?; UPDATE bdd_ca1.movie SET name = ?, description = ?, Release_Date=?, Image_URL=?, GenreId=?, Active=? WHERE (movieID = ?);    ";
+    var sqlStmt = "insert into bdd_ca1.log_updatemovies SELECT * from bdd_ca1.movie m WHERE m.movieID=?; UPDATE bdd_ca1.movie SET name = ?, description = ?, Release_Date=?, Image_URL=?, GenreId=?, Active=?, year=?, runtime=?, actor1=?, actor2=?, actor3=?, actor4=?, actor1_pic=?, actor2_pic=?, actor3_pic=?, actor4_pic=? WHERE (movieID = ?);    ";
 
     //3 - Execute query-connection
-    conn.query(sqlStmt, [movie_id, movieDetails.name, movieDetails.description, movieDetails.Release_Date, movieDetails.Image_URL, movieDetails.GenreId, movieDetails.Active, movie_id], (err, result) => {
-        //4 - End connection
-        conn.end();
+    conn.query(sqlStmt, [movie_id, movieDetails.name, movieDetails.description, movieDetails.Release_Date, movieDetails.Image_URL, movieDetails.GenreId, movieDetails.Active, movieDetails.year,
+        movieDetails.runtime,
+        movieDetails.actor1, movieDetails.actor2, movieDetails.actor3, movieDetails.actor4, movieDetails.actor1_pic, movieDetails.actor2_pic, movieDetails.actor3_pic, movieDetails.actor4_pic,
+        movie_id], (err, result) => {
+            //4 - End connection
+            conn.end();
 
-        //5 - React to error or result state/object
-        if (err) {
-            console.log(err);
-            return callback(err, null);
-        } else {
-            return callback(null, result);
+            //5 - React to error or result state/object
+            if (err) {
+                console.log(err);
+                return callback(err, null);
+            } else {
+                return callback(null, result);
 
-        }
-    })
+            }
+        })
 }
 
 // Delete movies

@@ -38,7 +38,8 @@ export const movieSlice = createSlice({
         GenreId: action.payload.genreId,
         Image_URL: action.payload.poster,
         links: action.payload.url,
-        Release_Date: action.payload.release
+        Release_Date: action.payload.release,
+        description: action.payload.description
       });
     },
     deleteOne: function (state, action) {

@@ -94,7 +94,7 @@ export default function MovieAdd(props) {
                         <Form.Control
                             type="number" // this alone can also prevent key in non numeric
                             defaultValue={rating}
-                            onChange={(e) => { dispatch(addfields({ title: title, description: description, rating: e.target.value, genreId: genreId, poster: poster, url: url, release: release, active: active })) }}
+                            onChange={(e) => { dispatch(addfields({ title: title, description: description, rating: Number(e.target.value), genreId: genreId, poster: poster, url: url, release: release, active: active })) }}
                             placeholder="required"
                             onKeyDown={(e) => restrictAlphabets(e)}
                         />
@@ -133,6 +133,7 @@ export default function MovieAdd(props) {
                     <Form.Group as={Col}>
                         <Form.Label>Website URL:</Form.Label>
                         <Form.Control
+                            type="Text"
                             value={url}
                             onChange={(e) => { dispatch(addfields({ title: title, description: description, rating: rating, genreId: genreId, poster: poster, url: e.target.value, release: release, active: active })) }}
                             required
@@ -168,10 +169,10 @@ export default function MovieAdd(props) {
                                 let nextId = movies.length - 1;
                                 let newId = nextId++;
                                 // Update Redux
-                                dispatch(add({ newId: newId, title: title, rating: rating, genreId: genreId, poster: poster, url: url, release: release }));
+                                dispatch(add({ newId: newId, title: title, rating: rating, genreId: genreId, poster: poster, url: url, release: release, description: description }));
 
                                 // Update Database backend
-                                const bodyData = { name: title, description: description, imdb: rating, GenreId: genreId, Image_URL: poster, links: url, Release_Date: release, Active: active, GenreFull: genreidMap[genreId] };
+                                const bodyData = { name: title, description: description, imdb: Number(rating), GenreId: genreId, Image_URL: poster, links: url, Release_Date: release, Active: active, GenreFull: genreidMap[genreId] };
 
                                 console.log("what are the added", bodyData);
 
