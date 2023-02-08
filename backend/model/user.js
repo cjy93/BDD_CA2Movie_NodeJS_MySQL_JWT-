@@ -26,7 +26,7 @@ userDB.getUser = (email, password, callback) => {
 }
 
 
-// Create new movies
+// Create new user
 userDB.createUser = (userDetails, hash, callback) => {
 
     //1 - Get the connection
@@ -54,7 +54,7 @@ userDB.createUser = (userDetails, hash, callback) => {
 // Authenticate if the token provided by user matches the database
 userDB.authenticate = (email, callback) => {
     var conn = db.getConnection();
-    // Email is unique
+    // Email is unique, so no need check against password
     var sqlStmt = "SELECT * FROM bdd_ca1.user WHERE LOWER(Email) = ?";
 
     conn.query(sqlStmt, [email.toLowerCase()], (err, result) => {

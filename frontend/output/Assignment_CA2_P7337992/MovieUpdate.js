@@ -246,6 +246,7 @@ export default function MovieUpdate(props) {
     as: Col
   }, /*#__PURE__*/React.createElement(Form.Label, null, "Release Date:"), /*#__PURE__*/React.createElement(Form.Control, {
     value: release,
+    type: "Date",
     onChange: e => {
       dispatch(updatefield({
         ...fields,

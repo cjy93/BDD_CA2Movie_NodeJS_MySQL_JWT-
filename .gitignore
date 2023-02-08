@@ -2,3 +2,5 @@
 *.docx
 *.config
 **/node_modules/
+databaseConfig.js
+node_modules/

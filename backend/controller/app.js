@@ -231,8 +231,12 @@ app.delete("/movie/:id", verifyToken, (req, res) => {
             if (err) {
                 res.status(500);
                 res.send({ message: "Internal Server Error" });
+            } else if (result.length == 0) {
+                res.status(404);
+                res.send({ message: "no record found" })
             } else {
                 res.status(200);
+                console.log(result)
                 res.send({ message: "Movie ID - " + req.params.id + " deleted" });
             }
         })
@@ -404,6 +408,54 @@ app.post("/login", (req, res) => {
                             }
                             var token = jwt.sign(userDetails, sign_key, { expiresIn: "2h" });
                             res.status(200).send({ "token": token })
+
+
+                        }
+                    })
+
+                }
+            }
+        })
+    }
+})
+
+
+
+// Check if user is in the list of users
+app.post("/userCheck", verifyToken, (req, res) => {
+    // No missing fields allowed
+    if (req.body.email == undefined || req.body.password == undefined) {
+        res.status(500);
+        res.send({ message: "Missing fields from body" });
+    } else {
+        // If there are no missing fields, proceed
+        var { email, password } = req.body;
+        console.log(password)
+        userDB.authenticate(email, (err, result) => {
+            if (err) {
+                res.status(500).send({ "message": "Interval server error." });
+            } else {
+                if (result.length < 1) {
+                    res.status(400).send({ "message": "No such user" })
+                } else {
+                    console.log(result);
+                    bcrypt.compare(password, result[0].Password, (err, hashResult) => {
+                        if (err) {
+                            res.status(500).send({ message: "Wrong password provided" });
+                        } else {
+                            console.log("Comparison success");
+                            console.log(result)
+                            // Email is unique, so there will be only one item in "result"
+                            var userDetails = {
+                                email: result[0].Email.toLowerCase(),
+                                role: result[0].Role
+                            }
+                            if (userDetails.role == "admin") {
+                                res.send({ message: "User " + userDetails.email + " is a admin" });
+                            } else {
+                                res.send({ message: "User " + userDetails.email + " is not an admin" })
+                            }
+
                         }
                     })
 

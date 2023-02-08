@@ -10,6 +10,15 @@ module.exports = {
         // default output to ./dist folder
         filename: '[name].js', // Retain original file name
     },
+    devServer: {
+        static: {
+            directory: __dirname,
+        },
+        compress: true,
+        port: 5501
+        // no publicPath
+        // port on server is 5501
+    },
     mode: 'development',
     watch: true,
     // add rules to enable import css based on :https://blog.jakoblind.no/css-modules-webpack/ 

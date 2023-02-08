@@ -143,6 +143,7 @@ export default function MovieAdd(props) {
                         <Form.Label>Release Date:</Form.Label>
                         <Form.Control
                             value={release}
+                            type="Date"
                             onChange={(e) => { dispatch(addfields({ title: title, description: description, rating: rating, genreId: genreId, poster: poster, url: url, release: e.target.value, active: active })) }}
                             placeholder="YYYY-MM-DD"
                             required

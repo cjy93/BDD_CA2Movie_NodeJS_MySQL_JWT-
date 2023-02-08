@@ -16,11 +16,13 @@
         "react-bootstrap": "^2.7.0",
         "react-dom": "^18.2.0",
         "react-redux": "^8.0.5",
-        "react-router-dom": "^6.7.0"
+        "react-router-dom": "^6.7.0",
+        "webpack-dev-server": "^4.11.1"
     },
     "scripts": {
         "start": "npx babel --watch src --out-dir output --presets @babel/preset-react --plugins=babel-plugin-add-import-extension",
-        "build": "webpack"
+        "build": "webpack",
+        "serve": "webpack serve"
     },
     "devDependencies": {
         "css-loader": "^6.7.3",

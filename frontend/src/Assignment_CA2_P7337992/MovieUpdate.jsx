@@ -173,6 +173,7 @@ export default function MovieUpdate(props) {
                                     <Form.Label>Release Date:</Form.Label>
                                     <Form.Control
                                         value={release}
+                                        type="Date"
                                         onChange={(e) => { dispatch(updatefield({ ...fields, release: e.target.value })) }}
                                         placeholder="YYYY-MM-DD"
                                     />

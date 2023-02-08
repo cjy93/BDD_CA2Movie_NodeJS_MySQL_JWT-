@@ -44,13 +44,14 @@ export default function MovieRetrieve(props) {
   //  Sort the movies into respective lists based on whether it was before May or after May (the month). ALl movies are from 2022, so no need to sort by year.
   movies.forEach(function (movie, index) {
     // Use "try" "catch" incase variable movie.release_date is null
-    if (movie.Release_Date.length > 0) {
-      if (mappingDate[movie.Release_Date.substr(0, 3)] > 3) {
-        // pull out first 3 characters of a string
-        filteredNew.push(movie);
-      } else if (mappingDate[movie.Release_Date.substr(0, 3)] <= 3) {
-        filteredOld.push(movie);
-      }
+    // if (movie.Release_Date.length > 0) {
+    //     if (mappingDate[movie.Release_Date.substr(0, 3)] > 3) {// pull out first 3 characters of a string
+    //         filteredNew.push(movie)
+    //     } else if (mappingDate[movie.Release_Date.substr(0, 3)] <= 3) {
+    //         filteredOld.push(movie)
+    //     }
+    if (movie.Active == "Y") {
+      filteredNew.push(movie);
     } else {
       // if the release date is not given(for example, those created under ADD function), we assume they are old movies
       filteredOld.push(movie);

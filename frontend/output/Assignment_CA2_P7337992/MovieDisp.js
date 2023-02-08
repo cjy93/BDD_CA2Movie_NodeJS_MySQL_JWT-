@@ -47,6 +47,7 @@ export default function MovieDisp(props) {
       variant: "primary",
       onClick: e => {
         MovieDataService.deleteMovie(movie.movieID).then(response => {
+          console.log("responses", response);
           if (response.data) {
             console.log("what is the delete response");
             console.log(response);

@@ -6,6 +6,7 @@ var db = {};
 db.getConnection = () => {
     var conn = mysql.createConnection({
         host: "bdd-ca2.cpmtggycmqa3.us-east-1.rds.amazonaws.com",
+        // host: "localhost",
         user: "jiayi123",
         password: "jiayi123^",
         database: "bdd_ca1",
