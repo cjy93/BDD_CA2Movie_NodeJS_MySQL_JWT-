@@ -1,5 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit';
 import React from 'react';
+var genreidMap = {
+  1: "Action",
+  2: "Adventure",
+  3: "Animation",
+  4: "Comedy",
+  5: "Crime",
+  6: "Documentary",
+  7: "Drama",
+  8: "Fantasy",
+  9: "Horror",
+  10: "Mystery",
+  11: "Romance",
+  12: "Sci-Fi",
+  13: "Sport"
+};
 export const movieSlice = createSlice({
   name: 'movieSlices',
   initialState: {
@@ -37,10 +52,9 @@ export const movieSlice = createSlice({
     update: function (state, action) {
       // used in "MovieUpdate.jsx"
       // update only the chosen movie and replace that item with action.payload
-
-      const updates_value = state.value.map(obj => {
-        if (parseInt(obj.id) == action.payload.id) {
-          obj.id = action.payload.id, obj.movie = action.payload.title, obj.imdb = action.payload.rating, obj.genres = action.payload.genres, obj.small_posters = action.payload.poster, obj.links = action.payload.url, obj.release_date = action.payload.release, obj.year = action.payload.year, obj.runtime = action.payload.runtime, obj.actor1 = action.payload.actor1, obj.actor2 = action.payload.actor2, obj.actor3 = action.payload.actor3, obj.actor4 = action.payload.actor4, obj.actor1_pic = action.payload.actor1_pic, obj.actor2_pic = action.payload.actor2_pic, obj.actor3_pic = action.payload.actor3_pic, obj.actor4_pic = action.payload.actor4_pic, obj.youtube = action.payload.youtube, obj.storyPlot = action.payload.storyPlot;
+      state.value.map(obj => {
+        if (parseInt(obj.movieID) == action.payload.id) {
+          obj.movieID = action.payload.id, obj.name = action.payload.title, obj.Active = action.payload.active, obj.imdb = action.payload.rating, obj.GenreId = action.payload.genreId, obj.Image_URL = action.payload.poster, obj.links = action.payload.url, obj.Release_Date = action.payload.release, obj.year = action.payload.year, obj.runtime = action.payload.runtime, obj.actor1 = action.payload.actor1, obj.actor2 = action.payload.actor2, obj.actor3 = action.payload.actor3, obj.actor4 = action.payload.actor4, obj.actor1_pic = action.payload.actor1_pic, obj.actor2_pic = action.payload.actor2_pic, obj.actor3_pic = action.payload.actor3_pic, obj.actor4_pic = action.payload.actor4_pic, obj.youtube = action.payload.youtube, obj.storyPlot = action.payload.storyPlot;
         }
       }); // note you cannot do `obj={xxx}` as it will not work. Need to define each element of obj and assign.
     }

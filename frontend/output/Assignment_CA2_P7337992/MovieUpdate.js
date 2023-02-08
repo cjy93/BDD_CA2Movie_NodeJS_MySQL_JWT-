@@ -300,8 +300,9 @@ export default function MovieUpdate(props) {
         storyPlot: storyPlot
       }; // "index" for is req.params
       console.log("what is put to updatemovie?", bodyData);
+      console.log("what is the updateField now", updateField);
       MovieDataService.updateMovie(bodyData, id).then(response => {
-        console.log("what is the response");
+        console.log("what is the response1");
         console.log(response);
       });
       // Update Redux list
@@ -474,7 +475,7 @@ export default function MovieUpdate(props) {
       // second param for is req.params
       MovieDataService.updateMovie(bodyData, id).then(response => {
         if (response.data) {
-          console.log("what is the response");
+          console.log("what is the response2");
           console.log(response);
         }
       });

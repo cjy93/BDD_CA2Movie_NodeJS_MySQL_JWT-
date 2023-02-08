@@ -197,8 +197,9 @@ export default function MovieUpdate(props) {
                                             // Update Database backend
                                             const bodyData = { movieID: id, name: title, description: description, imdb: rating, GenreId: genreId, Image_URL: poster, links: url, Release_Date: release, Active: active, GenreFull: genreidMap[genreId], year: year, runtime: runtime, actor1: actor1, actor2: actor2, actor3: actor3, actor4: actor4, actor1_pic: actor1_pic, actor2_pic: actor2_pic, actor3_pic: actor3_pic, actor4_pic: actor4_pic, youtube: youtube, storyPlot: storyPlot }; // "index" for is req.params
                                             console.log("what is put to updatemovie?", bodyData);
+                                            console.log("what is the updateField now", updateField)
                                             MovieDataService.updateMovie(bodyData, id).then(response => {
-                                                console.log("what is the response")
+                                                console.log("what is the response1");
                                                 console.log(response);
 
                                             });
@@ -317,7 +318,7 @@ export default function MovieUpdate(props) {
                                                         // second param for is req.params
                                                         MovieDataService.updateMovie(bodyData, id).then(response => {
                                                             if (response.data) {
-                                                                console.log("what is the response")
+                                                                console.log("what is the response2");
                                                                 console.log(response);
                                                             }
                                                         });
