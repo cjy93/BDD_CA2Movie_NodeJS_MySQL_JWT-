@@ -10,6 +10,20 @@ import { update } from './slices/movieSlice';
 import MovieDataService from "../services";
 
 export default function MovieUpdate(props) {
+    // Function to prevent user from typing non numeric in "rating" input textbox
+    /*code: 48-57 are Numbers*/
+    function restrictAlphabets(e) {
+        console.log("keystroke")
+        console.log(e)
+        var x = e.keyCode;
+        console.log(x)
+        if ((x >= 48 && x <= 57) || x == 190) {
+            return true;
+        } else {
+            e.preventDefault() // preventDefault to type if it is non numeric or "."
+            return false;
+        }
+    }
     const dispatch = useDispatch();
     // Add the movies from final list
     const movies = useSelector(function (store) {
@@ -160,6 +174,7 @@ export default function MovieUpdate(props) {
                                         type="Text"
                                         value={poster}
                                         onChange={(e) => { dispatch(updatefield({ ...fields, poster: e.target.value })) }}
+                                        placeholder="required"
                                     />
                                 </Form.Group>
                                 <Form.Group as={Col}>
@@ -167,6 +182,7 @@ export default function MovieUpdate(props) {
                                     <Form.Control
                                         value={url}
                                         onChange={(e) => { dispatch(updatefield({ ...fields, url: e.target.value })) }}
+                                        placeholder="required"
                                     />
                                 </Form.Group>
                                 <Form.Group as={Col}>
@@ -183,8 +199,7 @@ export default function MovieUpdate(props) {
                                     <Form.Select
                                         value={active}
                                         onChange={(e) => { dispatch(updatefield({ ...fields, active: e.target.value })) }}
-                                        placeholder="Choose"
-                                    >
+                                        placeholder="required"                                    >
                                         <option value="Choose">Choose</option>
                                         <option value="N">N</option>
                                         <option value="Y">Y</option>
@@ -201,10 +216,16 @@ export default function MovieUpdate(props) {
                                             MovieDataService.updateMovie(bodyData, id).then(response => {
                                                 console.log("what is the response1");
                                                 console.log(response);
-
                                             });
-                                            // Update Redux list
-                                            dispatch(update(updateField));
+                                            // To avoid frontend and backend database mismatch, we also need all the fields to be completed before update Redux frontend
+                                            if (id == undefined || title == undefined || description == undefined || rating == undefined || genreId == undefined || poster == undefined || url == undefined || release == undefined || active == undefined) {
+                                                alert("You have missing compulsory fields!")
+                                            } else {
+                                                // Update Redux list
+                                                console.log("you have successfully put in all the fields")
+                                                dispatch(update(updateField));
+                                            }
+
                                         }}>Update</Button>
 
                                 </Form.Group>
