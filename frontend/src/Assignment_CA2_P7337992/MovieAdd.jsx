@@ -165,11 +165,17 @@ export default function MovieAdd(props) {
                     <Form.Group>
                         <Button variant="primary"
                             onClick={() => {
-                                // Index for the new elements created by "Add" function. Users do not need to add index, the code will find the next empty integer via "nextId"
-                                let nextId = movies.length - 1;
-                                let newId = nextId++;
-                                // Update Redux
-                                dispatch(add({ newId: newId, title: title, rating: rating, genreId: genreId, poster: poster, url: url, release: release, description: description }));
+                                // To avoid frontend and backend database mismatch, we also need all the fields to be completed before update Redux frontend
+                                if (title == "" || description == "" || rating == 0 || genreId == "" || poster == "" || url == "" || release == "" || active == "") {
+                                    alert("You have missing compulsory fields!")
+                                } else {
+                                    // Index for the new elements created by "Add" function. Users do not need to add index, the code will find the next empty integer via "nextId"
+                                    let nextId = movies.length - 1;
+                                    let newId = nextId++;
+                                    // Update Redux
+                                    dispatch(add({ newId: newId, title: title, rating: rating, genreId: genreId, poster: poster, url: url, release: release, description: description }));
+                                };
+
 
                                 // Update Database backend
                                 const bodyData = { name: title, description: description, imdb: Number(rating), GenreId: genreId, Image_URL: poster, links: url, Release_Date: release, Active: active, GenreFull: genreidMap[genreId] };

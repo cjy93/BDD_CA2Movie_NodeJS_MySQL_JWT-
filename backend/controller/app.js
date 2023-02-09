@@ -397,17 +397,21 @@ app.post("/login", (req, res) => {
                     console.log(result);
                     bcrypt.compare(password, result[0].Password, (err, hashResult) => {
                         if (err) {
-                            res.status(500).send({ message: "Wrong password provided" });
+                            res.status(500).send({ message: "Internal server error" });
                         } else {
-                            console.log("Comparison success");
-                            console.log(result)
-                            // Email is unique, so there will be only one item in "result"
-                            var userDetails = {
-                                email: result[0].Email.toLowerCase(),
-                                role: result[0].Role
+                            console.log("hashResult", hashResult)
+                            if (hashResult == false) {
+                                res.status(400).send({ message: "Wrong password" })
+                            } else {
+                                console.log("Comparison success");
+                                // Email is unique, so there will be only one item in "result"
+                                var userDetails = {
+                                    email: result[0].Email.toLowerCase(),
+                                    role: result[0].Role
+                                }
+                                var token = jwt.sign(userDetails, sign_key, { expiresIn: "2h" });
+                                res.status(200).send({ "token": token })
                             }
-                            var token = jwt.sign(userDetails, sign_key, { expiresIn: "2h" });
-                            res.status(200).send({ "token": token })
 
 
                         }
