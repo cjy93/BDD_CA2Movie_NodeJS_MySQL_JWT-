@@ -170,15 +170,16 @@ export default function MovieAdd(props) {
                                     alert("You have missing compulsory fields!")
                                 } else {
                                     // Index for the new elements created by "Add" function. Users do not need to add index, the code will find the next empty integer via "nextId"
-                                    let nextId = movies.length - 1;
-                                    let newId = nextId++;
+                                    // Put arbitrary big ID first; so it does not interfere with existing records; so we can click on this movie for updates or delete item
+                                    let newId = 1000000;
                                     // Update Redux
                                     dispatch(add({ newId: newId, title: title, rating: rating, genreId: genreId, poster: poster, url: url, release: release, description: description }));
                                 };
 
 
                                 // Update Database backend
-                                const bodyData = { name: title, description: description, imdb: Number(rating), GenreId: genreId, Image_URL: poster, links: url, Release_Date: release, Active: active, GenreFull: genreidMap[genreId] };
+                                // Put arbitrary big ID first; so it does not interfere with existing records; so we can click on this movie for updates or delete item
+                                const bodyData = { movieID: 1000000, name: title, description: description, imdb: Number(rating), GenreId: genreId, Image_URL: poster, links: url, Release_Date: release, Active: active, GenreFull: genreidMap[genreId] };
 
                                 console.log("what are the added", bodyData);
 
