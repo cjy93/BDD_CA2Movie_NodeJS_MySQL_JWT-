@@ -5,7 +5,7 @@ var db = {};
 // Advanced feature during create connection: allow for multiple SQL statements with "multipleStatements:true"
 db.getConnection = () => {
     var conn = mysql.createConnection({
-        host: "bdd-ca2.cpmtggycmqa3.us-east-1.rds.amazonaws.com",
+        host: "localhost",
         // host: "localhost",
         user: "jiayi123",
         password: "jiayi123^",
