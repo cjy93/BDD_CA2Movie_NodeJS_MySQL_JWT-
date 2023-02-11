@@ -36,6 +36,6 @@ password: "jiayi123^"
 
 # Official Github repo
 After the official oral presentation, I will make this repo public at:
-https://github.com/cjy93/BDD_Movie_NodeJS_MySQL_App
+https://github.com/cjy93/BDD_CA2Movie_NodeJS_MySQL_JWT
 
 "# BDD_CA2Movie_NodeJS_MySQL_JWT-" 
